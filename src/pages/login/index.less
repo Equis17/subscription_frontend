@@ -1,0 +1,53 @@
+@import url(./../../style/default);
+
+.login {
+  &-header {
+    position: fixed;
+    width: 100%;
+    &-logo {
+      height: 60px;
+      padding: 0 100px;
+      background-color: @colorC;
+
+      img {
+        padding: 10px 0;
+        margin-right: 20px;
+        width: 40px;
+      }
+
+      span {
+        font-size: 18px;
+        color: @colorM;
+      }
+    }
+  }
+
+  &-wrap {
+    height: calc(100vh);
+    background-color: @colorL;
+    box-sizing: border-box;
+    padding: 160px 230px 230px 100px;
+  }
+
+  &-content {
+    min-width: 900px;
+
+    &-words {
+      color: @colorG;
+      float: left;
+      margin-left: 160px;
+      width: 250px;
+      font-size: 60px;
+      font-weight: 900;
+    }
+
+    &-form {
+      float: right;
+      box-sizing: border-box;
+      border-radius: 15px;
+      width: 370px;
+      height: 320px;
+      background-color: @colorM;
+    }
+  }
+}
