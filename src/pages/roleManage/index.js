@@ -25,7 +25,7 @@ class RoleManage extends Component {
   componentDidMount() {
     const {switchMenuKey, match} = this.props;
     switchMenuKey(match.path);
-    this.getRoleList({toggle: '2'})
+    this.getRoleList({})
   }
 
 
@@ -54,7 +54,7 @@ class RoleManage extends Component {
         {type: 'INPUT', label: '角色名称', field: 'roleName'},
         {
           type: 'SELECT', label: '是否启用', field: 'toggle', initialValue: '1',
-          opts: [{value: '1', label: '是'}, {value: '0', label: '否'}, {value: '2', label: '全部'}]
+          opts: [{value: '1', label: '是'}, {value: '0', label: '否'}, {value: '', label: '全部'}]
         },
         {field: 'hole'}
         ,
@@ -88,28 +88,28 @@ class RoleManage extends Component {
   renderTable() {
     const {isTableLoading: loading, tableList: dataSource} = this.state;
     const columns = [
-      {title: '角色名称', dataIndex: 'name'},
+      {title: '角色名称', dataIndex: 'roleName'},
       {
         title: '是否启用',
         dataIndex: 'toggle',
         width: 200,
         align: 'center',
-        render: (text, record) => record.toggle === '1' ? '已启用' : '未启用'
+        render: (text, record) => record.toggle ? '已启用' : '未启用'
       },
       {
         title: '操作',
         dataIndex: 'unit',
         width: 100,
         align: 'center',
-        render: (text, record) => this.renterTableOperation(record)
+        render: (text, record) => this.renderTableOperation(record)
       }
     ];
     return <CardTable tableConfig={{dataSource, columns, loading, size: 'small', rowKey: (row) => row.id}}/>
   }
 
-  renterTableOperation(record) {
+  renderTableOperation(record) {
     const {switchVisible} = this.props;
-    const {toggle, name: roleName, id} = record;
+    const {toggle, roleName, id} = record;
     return (
       <div className={'handleBox'}>
         <a onClick={() => {
@@ -147,7 +147,7 @@ class RoleManage extends Component {
   }
 
   renderModal() {
-    return <PopupModal resetValue={()=>this._setModalFields({})} createMethod={form => this._createModalForm(form)}  />
+    return <PopupModal resetValue={() => this._setModalFields({})} createMethod={form => this._createModalForm(form)}/>
   }
 
   _createModalForm(form) {
@@ -165,7 +165,7 @@ class RoleManage extends Component {
         type: 'SELECT',
         label: '是否启用',
         field: 'toggle',
-        initialValue: toggle,
+        initialValue: toggle?'1':'0',
         rules: [{required: true, message: '是否启用不能为空'}],
         opts: [{value: '1', label: '是'}, {value: '0', label: '否'}]
       }],

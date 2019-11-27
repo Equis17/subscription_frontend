@@ -27,7 +27,7 @@ class RouterManage extends Component {
   componentDidMount() {
     const {switchMenuKey, match} = this.props;
     switchMenuKey(match.path);
-    this.getRouterList({toggle: '2'});
+    this.getRouterList({});
   }
 
   _setModalFields({toggle = '1', routerName = '', routerUrl = '', id = ''}) {
@@ -56,7 +56,7 @@ class RouterManage extends Component {
         {type: 'INPUT', label: '路由地址', field: 'routerUrl',},
         {
           type: 'SELECT', label: '是否启用', field: 'toggle', initialValue: '1',
-          opts: [{value: '1', label: '是'}, {value: '0', label: '否'}, {value: '2', label: '全部'}]
+          opts: [{value: '1', label: '是'}, {value: '0', label: '否'}, {value: '', label: '全部'}]
         },
         {
           type: 'BUTTON', field: 'btns',
@@ -88,29 +88,29 @@ class RouterManage extends Component {
   renderTable() {
     const {isTableLoading: loading, tableList: dataSource} = this.state;
     const columns = [
-      {title: '路由名称', dataIndex: 'name'},
-      {title: '路由地址', dataIndex: 'url'},
+      {title: '路由名称', dataIndex: 'routerName'},
+      {title: '路由地址', dataIndex: 'routerUrl'},
       {
         title: '是否启用',
         dataIndex: 'toggle',
         width: 200,
         align: 'center',
-        render: (text, record) => record.toggle === '1' ? '已启用' : '未启用'
+        render: (text, record) => record.toggle? '已启用' : '未启用'
       },
       {
         title: '操作',
         dataIndex: 'unit',
         width: 100,
         align: 'center',
-        render: (text, record) => this.renterTableOperation(record)
+        render: (text, record) => this.renderTableOperation(record)
       }
     ];
     return <CardTable tableConfig={{dataSource, columns, loading, size: 'small', rowKey: (row) => row.id}}/>
   }
 
-  renterTableOperation(record) {
+  renderTableOperation(record) {
     const {switchVisible} = this.props;
-    const {toggle, name: routerName, url: routerUrl, id} = record;
+    const {toggle, routerName, routerUrl, id} = record;
     return (
       <div className={'handleBox'}>
         <a onClick={() => {
@@ -174,7 +174,7 @@ class RouterManage extends Component {
         type: 'SELECT',
         label: '是否启用',
         field: 'toggle',
-        initialValue: toggle,
+        initialValue: toggle?'1':'0',
         rules: [{required: true, message: '是否启用不能为空'}],
         opts: [{value: '1', label: '是'}, {value: '0', label: '否'}]
       }],

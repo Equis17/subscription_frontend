@@ -31,7 +31,9 @@ class CourseManage extends Component {
         collegeId: '',
         userId: '',
         courseName: '',
-        courseTime: ''
+        courseTime: '',
+        collegeIds: '',
+        sessions: ''
       },
       searchFilter: {}
     }
@@ -44,12 +46,12 @@ class CourseManage extends Component {
       .then(() => this.getCourseList())
   }
 
-  _setModalFields({id = '', collegeId = '-1', userId = '-1', courseName = '', courseTime = ''}) {
-    this.setState({modalFields: {id, collegeId, userId, courseName, courseTime}})
+  _setModalFields({id = '', collegeId = '', userId = '', courseName = '', courseTime = '', collegeIds = '', sessions = ''}) {
+    this.setState({modalFields: {id, collegeId, userId, courseName, courseTime, collegeIds, sessions}})
   }
 
   getSelectList() {
-    return request('get', {url: api.getUserList, data: {roleId: '12', collegeId: '-1', toggle: '1'}})
+    return request('get', {url: api.getTeacherList})
       .then(res => {
         res.data.map(i => {
           i.value = i.id.toString();
@@ -62,7 +64,7 @@ class CourseManage extends Component {
       .then(res => {
         res.data.map(i => {
           i.value = i.id.toString();
-          i.label = i.name;
+          i.label = i.collegeName;
           return i;
         });
         this.setState({collegeList: res ? res.data : []})
@@ -71,15 +73,27 @@ class CourseManage extends Component {
   }
 
   getCourseList(fields) {
+    const {collegeList} = this.state;
     this.setState({isTableLoading: true});
     request('get', {url: api.getCourseList, data: fields})
-      .then(res => this.setState({tableList: res ? res.data : [], isTableLoading: false}))
+      .then(res => {
+        const data = res.data ? res.data : [];
+        this.setState({
+          isTableLoading: false,
+          tableList: data.map(item => ({
+            ...item,
+            collegeNameList: item.collegeIds.split(',')
+              .map(num => collegeList.filter(college => college.id.toString() === num)[0]['collegeName'])
+              .join(',\n')
+          }))
+        })
+      })
       .catch(err => console.log(err));
   }
 
   getCourseBookList(id) {
     this.setState({isDetailLoading: true});
-    request('get', {url: api.getBookList, data: {toggle: '1'}})
+    request('get', {url: api.getBookList, data: {status: '2', toggle: '1'}})
       .then(res => {
         this.setState({bookList: res ? res.data : []});
         return request('get', {url: api.getCourseBookList + id})
@@ -91,21 +105,30 @@ class CourseManage extends Component {
 
   //SearchBox
   handleSearch = (fields) => {
-    this.setState({searchFilter: fields});
-    this.getCourseList(fields);
+    const searchFields = {...fields, sessions: fields.sessions.join(','), collegeIds: fields.collegeIds.join(',')}
+    this.setState({searchFilter: searchFields});
+    this.getCourseList(searchFields);
   };
 
   renderSearchBox = () => <SearchBox title={'新增课程'} createMethod={(form) => this._createSearchForm(form)}/>;
 
   _createSearchForm(form) {
     const {teacherList = [], collegeList = []} = this.state;
+    const thisSession = moment()
+      .year();
+    const lastSession = thisSession - 3;
+    const sessionList = [...Array(thisSession - lastSession + 1)].map((e, i) => ({
+      id: i,
+      value: `${lastSession + i}`,
+      label: `${lastSession + i}`
+    }));
     return [
       [
-        {type: 'INPUT', label: '课程名称', field: 'name'},
-        {type: 'INPUT', label: '上课时间', field: 'time'},
+        {type: 'INPUT', label: '课程名称', field: 'courseName'},
+        {type: 'INPUT', label: '上课时间', field: 'courseTime'},
         {
-          type: 'SELECT', label: '开课单位', field: 'collegeId', initialValue: '-1',
-          opts: [...collegeList, {value: '-1', label: '全部'}]
+          type: 'SELECT', label: '开课单位', field: 'collegeId', initialValue: '',
+          opts: [...collegeList, {value: '', label: '全部'}]
         },
         {
           type: 'BUTTON', field: 'btns',
@@ -122,9 +145,11 @@ class CourseManage extends Component {
       ],
       [
         {
-          type: 'SELECT', label: '任课教师', field: 'userId', initialValue: '-1',
-          opts: [...teacherList, {value: '-1', label: '全部'}]
-        }
+          type: 'SELECT', label: '任课教师', field: 'userId', initialValue: '',
+          opts: [...teacherList, {value: '', label: '全部'}]
+        },
+        {type: 'MULTISELECT', label: '开放年届', field: 'sessions', initialValue: [], opts: sessionList},
+        {type: 'MULTISELECT', label: '开放学院', field: 'collegeIds', initialValue: [], opts: collegeList}
       ]
     ]
   }
@@ -141,30 +166,34 @@ class CourseManage extends Component {
     const {isTableLoading: loading, tableList: dataSource} = this.state;
     const columns = [
       {title: '课程名称', dataIndex: 'courseName'},
-      {title: '开课单位', dataIndex: 'courseCollegeName'},
+      {title: '开课单位', dataIndex: 'collegeName'},
       {title: '上课时间', dataIndex: 'courseTime'},
-      {title: '任课教师', dataIndex: 'courseUserName'},
-      {title: '教师所属学院', dataIndex: 'userCollegeName'},
-      {title: '手机号', dataIndex: 'userPhoneNumber'},
+      {title: '开放年届', dataIndex: 'sessions'},
+      {
+        title: '开放院系',
+        dataIndex: 'collegeNameList',
+        width: 160
+      },
+      {title: '任课教师', dataIndex: 'realName'},
+      {title: '手机号', dataIndex: 'phoneNumber'},
       {
         title: '操作',
         dataIndex: 'unit',
         width: 200,
         align: 'center',
-        render: (text, record) => this.renterTableOperation(record)
+        render: (text, record) => this.renderTableOperation(record)
       }
     ];
     return <CardTable tableConfig={{dataSource, columns, loading, size: 'small', rowKey: (row) => row.id}}/>
   }
 
-  renterTableOperation(record) {
+  renderTableOperation(record) {
     const {switchVisible} = this.props;
-    const {id, courseCollegeId: collegeId, courseUserId: userId, courseName, courseTime} = record;
-
+    const {id, collegeId, userId, courseName, courseTime, sessions, collegeIds} = record;
     return (
       <div className={'handleBox'}>
         <a onClick={() => {
-          this._setModalFields({collegeId, userId, courseName, courseTime, id});
+          this._setModalFields({collegeId, userId, courseName, courseTime, id, sessions, collegeIds});
           switchVisible({visible: true, title: '编辑课程'})
         }}>编辑</a>
         <span>|</span>
@@ -200,8 +229,7 @@ class CourseManage extends Component {
     const newData = {
       id: `add${length}`,
       bookId: '',
-      startTime: moment(),
-      endTime: moment()
+      status: 1
     };
     this.setState({detailList: [...detailList, newData]})
   }
@@ -221,7 +249,7 @@ class CourseManage extends Component {
     //筛选要删除的item并保存到新的数组
     const newListData = detailList ? detailList.filter((item) => item.id !== id) : [];
     //还原被删除的表单,否则会导致数据残留报错
-    form.resetFields([`name${id}`, `marketPrice${id}`, `countUnit${id}`, `unit${id}`]);
+    form.resetFields([`bookId${id}`, `status${id}`]);
     this.setState({detailList: newListData});
   }
 
@@ -235,11 +263,10 @@ class CourseManage extends Component {
           : [];
         const formValues = items.map((item) => ({
           bookId: form.getFieldsValue([`bookId${item}`])[`bookId${item}`],
-          startTime: form.getFieldsValue([`startTime${item}`])[`startTime${item}`].format('YYYY-MM-DD'),
-          endTime: form.getFieldsValue([`endTime${item}`])[`endTime${item}`].format('YYYY-MM-DD')
+          status: form.getFieldsValue([`status${item}`])[`status${item}`]
         }));
 
-        request('post', {url: api.updateCourseBook+id, data: {courseBookList: formValues}})
+        request('post', {url: api.updateCourseBook + id, data: {courseBookList: formValues}})
           .then(res => {
             message.success(res.message);
             this.getCourseBookList(id)
@@ -261,30 +288,29 @@ class CourseManage extends Component {
               initialValue: row.bookId,
               placeholder: '请输入教材名称',
               rules: [{required: true, message: '教材名称不能为空'}]
-            })(<Select size={'small'} style={{width: '100%'}}>{bookList.map(book => <Option key={book.id}
-                                                                                            value={book.id}>{book.name}({book.isbn})</Option>)}</Select>)}
+            })(
+              <Select size={'small'} style={{width: '100%'}}>
+                {bookList.map(book => <Option key={book.id} value={book.id}>{book.bookName}({book.ISBN})</Option>)}
+              </Select>
+            )}
           </FormItem>
-      }, {
-        title: '开始预订日期', dataIndex: 'startTime', width: 250, align: 'center',
+      },
+      {
+        title: '教材状态', dataIndex: 'status', width: 100, align: 'center',
         render: (text, row) =>
           <FormItem style={{marginBottom: '0'}}>
-            {form.getFieldDecorator(`startTime${row.id}`, {
-              placeholder: '请输入开始预订日期',
-              initialValue: moment(row.startTime),
-              rules: [{required: true, message: '开始预定日期不能为空'}]
-            })(<DatePicker size={'small'}/>)}
+            {form.getFieldDecorator(`status${row.id}`, {
+              placeholder: '请输入教材状态',
+              initialValue: row.status || 1,
+              rules: [{required: true, message: '教材状态不能为空'}]
+            })(<Select  size={'small'}>
+              <Option value={1}>审核中</Option>
+              <Option value={2}>审核成功</Option>
+              <Option value={3}>审核失败</Option>
+            </Select>)}
           </FormItem>
-      }, {
-        title: '结束时间', dataIndex: 'endTime', width: 250, align: 'center',
-        render: (text, row) =>
-          <FormItem style={{marginBottom: '0'}}>
-            {form.getFieldDecorator(`endTime${row.id}`, {
-              placeholder: '请输入结束预订日期',
-              initialValue: moment(row.endTime),
-              rules: [{required: true, message: '结束预订日期不能为空'}]
-            })(<DatePicker size={'small'}/>)}
-          </FormItem>
-      }, {
+      },
+      {
         title: '操作', dataIndex: '_option', width: 100, align: 'center',
         render: (text, row) =>
           <div className={'handleBox'}>
@@ -341,9 +367,21 @@ class CourseManage extends Component {
   handleSubmit(form) {
     const {searchFilter, modalFields} = this.state;
     const {id} = modalFields;
-    form.validateFields(['name', 'time', 'userId', 'courseId'], err => {
+    form.validateFields(['courseName', 'courseTime', 'userId', 'courseId', 'sessions', 'collegeIds', 'collegeId'], err => {
       if (!err) {
-        request('post', {url: id ? api.updateCourse + id : api.addCourse, data: form.getFieldsValue()})
+        const {courseTime, courseName, userId, courseId, collegeId, sessions, collegeIds} = form.getFieldsValue();
+        request('post', {
+          url: id ? api.updateCourse + id : api.addCourse,
+          data: {
+            courseName,
+            courseTime,
+            userId,
+            courseId,
+            collegeId,
+            sessions: sessions.join(','),
+            collegeIds: collegeIds.join(',')
+          }
+        })
           .then(res => {
             message.success(res.message);
             this.props.switchVisible({visible: false, title: ''});
@@ -361,12 +399,21 @@ class CourseManage extends Component {
 
   _createModalForm(form) {
     const {teacherList, collegeList, modalFields} = this.state;
-    const {collegeId = '-1', userId = '-1', courseName = '', courseTime = ''} = modalFields;
+    const {collegeId = '', userId = '', courseName = '', courseTime = '', collegeIds = '', sessions = ''} = modalFields;
+    const thisSession = moment()
+      .year();
+    const lastSession = thisSession - 3;
+    const sessionList = [...Array(thisSession - lastSession + 1)].map((e, i) => ({
+      id: i,
+      value: `${lastSession + i}`,
+      label: lastSession + i
+    }));
+
     return [
       [{
         type: 'INPUT',
         label: '课程名称',
-        field: 'name',
+        field: 'courseName',
         initialValue: courseName,
         rules: [{required: true, message: '课程名称不能为空'}],
         placeholder: '请输入课程名称'
@@ -374,7 +421,7 @@ class CourseManage extends Component {
       [{
         type: 'INPUT',
         label: '上课时间',
-        field: 'time',
+        field: 'courseTime',
         initialValue: courseTime,
         rules: [{required: true, message: '上课时间不能为空'}],
         placeholder: '请输入上课时间'
@@ -383,17 +430,34 @@ class CourseManage extends Component {
         type: 'SELECT',
         label: '任课教师',
         field: 'userId',
-        initialValue: userId.toString() !== '-1' ? userId.toString() : '',
-        rules: [{required: true, message: '任课教师师不能为空'}],
+        initialValue: userId.toString() ? userId.toString() : '',
+        rules: [{required: true, message: '任课教师不能为空'}],
         opts: teacherList
       }],
       [{
         type: 'SELECT',
         label: '开课单位',
         field: 'collegeId',
-        initialValue: collegeId.toString() !== '-1' ? collegeId.toString() : '',
+        initialValue: collegeId.toString() ? collegeId.toString() : '',
         rules: [{required: true, message: '开课单位不能为空'}],
         opts: collegeList
+      }],
+      [{
+        type: 'MULTISELECT',
+        label: '开放院系',
+        field: 'collegeIds',
+        initialValue: collegeIds ? collegeIds.split(',') : [],
+        opts: collegeList,
+        rules: [{required: true, message: '开放院系不能为空'}],
+      }],
+      [{
+        type: 'MULTISELECT',
+        label: '开放年届',
+        field: 'sessions',
+        initialValue: sessions ? sessions.split(',') : [],
+        opts: sessionList,
+        rules: [{required: true, message: '开放年届不能为空'}],
+
       }],
       [{
         type: 'BUTTON',
@@ -416,7 +480,6 @@ class CourseManage extends Component {
         ]
       }],
     ];
-
   }
 
   render() {

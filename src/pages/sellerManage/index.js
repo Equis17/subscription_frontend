@@ -15,16 +15,14 @@ class SellerManage extends Component {
     super(props);
     this.state = {
       tableList: [],
-      roleList: [],
       isTableLoading: true,
       modalFields: {
-        name: '',
+        sellerName: '',
         source: '',
         phoneNumber: '',
         email: '',
         address: '',
         toggle: '1',
-        roleId: '-1',
         account: '',
         id: ''
       },
@@ -35,25 +33,11 @@ class SellerManage extends Component {
   componentDidMount() {
     const {switchMenuKey, match} = this.props;
     switchMenuKey(match.path);
-    this.getSelectList()
-      .then(() => this.getSellerList());
+    this.getSellerList({});
   }
 
-  _setModalFields({name = '', source = '', phoneNumber = '', email = '', address = '', account, toggle = '1', roleId = '-1', id = ''}) {
-    this.setState({modalFields: {name, source, phoneNumber, email, address, toggle, account, roleId, id}})
-  }
-
-  getSelectList() {
-    return request('get', {url: api.getRoleList, data: {roleName: '商'}})
-      .then(res => {
-        res.data.map(i => {
-          i.value = i.id.toString();
-          i.label = i.name;
-          return i;
-        });
-        this.setState({roleList: res ? res.data : []})
-      })
-      .catch(err => console.log(err));
+  _setModalFields({sellerName = '', source = '', phoneNumber = '', email = '', address = '', account, toggle = '1', id = ''}) {
+    this.setState({modalFields: {sellerName, source, phoneNumber, email, address, toggle, account, id}})
   }
 
   getSellerList(fields) {
@@ -72,25 +56,20 @@ class SellerManage extends Component {
   renderSearchBox = () => <SearchBox title={'新增教材批发商'} createMethod={(form) => this._createSearchForm(form)}/>;
 
   _createSearchForm(form) {
-    const {roleList = []} = this.state;
     return [
       [
-        {type: 'INPUT', label: '真实姓名', field: 'name'},
-        {type: 'INPUT', label: '批发商来源', field: 'source'},
+        {type: 'INPUT', label: '姓名', field: 'sellerName'},
+        {type: 'INPUT', label: '来源', field: 'source'},
         {type: 'INPUT', label: '手机号', field: 'phoneNumber'},
         {type: 'INPUT', label: 'E-mail', field: 'email'},
       ],
       [
-
         {type: 'INPUT', label: '地址', field: 'address'},
         {
-          type: 'SELECT', label: '角色类型', field: 'roleId', initialValue: '-1',
-          opts: [...roleList, {value: '-1', label: '全部'}]
-        },
-        {
           type: 'SELECT', label: '是否启用', field: 'toggle', initialValue: '1',
-          opts: [{value: '1', label: '是'}, {value: '0', label: '否'}, {value: '2', label: '全部'}]
+          opts: [{value: '1', label: '是'}, {value: '0', label: '否'}, {value: '', label: '全部'}]
         },
+        {field: 'hole'},
         {
           type: 'BUTTON', field: 'btns',
           btns: [{
@@ -118,11 +97,10 @@ class SellerManage extends Component {
   renderTable() {
     const {isTableLoading: loading, tableList: dataSource} = this.state;
     const columns = [
-      {title: '用户名', dataIndex: 'account'},
-      {title: '真实姓名', dataIndex: 'name'},
+      {title: '姓名', dataIndex: 'sellerName'},
+      {title: '用户名', dataIndex: 'phoneNumber'},
       {title: '角色类型', dataIndex: 'roleName'},
       {title: '来源', dataIndex: 'source'},
-      {title: '手机号', dataIndex: 'phoneNumber'},
       {title: 'E-mail', dataIndex: 'email'},
       {title: '地址', dataIndex: 'address'},
       {
@@ -130,26 +108,26 @@ class SellerManage extends Component {
         dataIndex: 'toggle',
         width: 200,
         align: 'center',
-        render: (text, record) => record.toggle === '1' ? '已启用' : '未启用'
+        render: (text, record) => record.toggle ? '已启用' : '未启用'
       },
       {
         title: '操作',
         dataIndex: 'unit',
         width: 100,
         align: 'center',
-        render: (text, record) => this.renterTableOperation(record)
+        render: (text, record) => this.renderTableOperation(record)
       }
     ];
     return <CardTable tableConfig={{dataSource, columns, loading, size: 'small', rowKey: (row) => row.id}}/>
   }
 
-  renterTableOperation(record) {
+  renderTableOperation(record) {
     const {switchVisible} = this.props;
-    const {toggle, roleId, account, id, name, phoneNumber, source, email, address} = record;
+    const {toggle, account, id, sellerName, phoneNumber, source, email, address} = record;
     return (
       <div className={'handleBox'}>
         <a onClick={() => {
-          this._setModalFields({toggle, roleId, account, id, name, phoneNumber, source, email, address});
+          this._setModalFields({toggle, account, id, sellerName, phoneNumber, source, email, address});
           switchVisible({visible: true, title: '编辑批发商'})
         }}>编辑</a>
         <span>|</span>
@@ -169,17 +147,17 @@ class SellerManage extends Component {
   handleSubmit(form) {
     const {searchFilter, modalFields} = this.state;
     const {id} = modalFields;
-    form.validateFields(['userAccount', 'userPassword', 'userName', 'userPhoneNumber', 'userEmail', 'userAddress', 'userSource', 'roleId', 'toggle'], err => {
+    form.validateFields(['sellerName', 'phoneNumber', 'password', 'email', 'address', 'source', 'toggle'], err => {
       if (!err) {
-        const {userAccount: account, userPassword, userName: name, userPhoneNumber: phoneNumber, userEmail: email, userAddress: address, userSource: source, roleId, toggle} = form.getFieldsValue();
+        const {password, sellerName, phoneNumber, email, address, source, toggle} = form.getFieldsValue();
         request('get', {url: api.getPublicKey})
           .then(res => {
             const encrypt = new JSEncrypt();
             encrypt.setPublicKey(res.data.publicKey);
-            const password = encrypt.encrypt(userPassword);
+            const encryptedPassword = encrypt.encrypt(password);
             return request('post', {
               url: id ? api.updateSeller + id : api.addSeller,
-              data: {account, password, name, phoneNumber, email, address, roleId, toggle, source}
+              data: {password: encryptedPassword, sellerName, phoneNumber, email, address, toggle, source}
             })
           })
           .then(res => {
@@ -198,36 +176,28 @@ class SellerManage extends Component {
   }
 
   _createModalForm(form) {
-    const {roleList, modalFields} = this.state;
-    const {name = '', source = '', phoneNumber = '', email = '', address = '', toggle = '1', roleId = '-1', account = ''} = modalFields;
+    const {modalFields} = this.state;
+    const {sellerName = '', source = '', phoneNumber = '', email = '', address = '', toggle = '1'} = modalFields;
     return [
       [{
         type: 'INPUT',
-        label: '用户名',
-        field: 'userAccount',
-        initialValue: account,
-        rules: [{required: true, message: '用户名不能为空'}],
-        placeholder: '请输入用户名'
+        label: '姓名',
+        field: 'sellerName',
+        initialValue: sellerName,
+        rules: [{required: true, message: '不能为空'}],
+        placeholder: '请输入姓名'
       }],
       [{
         type: 'PASSWORD',
         label: '密码',
-        field: 'userPassword',
+        field: 'password',
         rules: [{required: true, message: '密码不能为空'}],
         placeholder: '请输入密码'
       }],
       [{
         type: 'INPUT',
-        label: '真实姓名',
-        field: 'userName',
-        initialValue: name,
-        rules: [{required: true, message: '真实姓名不能为空'}],
-        placeholder: '请输入真实姓名'
-      }],
-      [{
-        type: 'INPUT',
         label: '手机号码',
-        field: 'userPhoneNumber',
+        field: 'phoneNumber',
         initialValue: phoneNumber,
         rules: [{required: true, message: '手机号码不能为空'}],
         placeholder: '请输入手机号码'
@@ -235,7 +205,7 @@ class SellerManage extends Component {
       [{
         type: 'INPUT',
         label: 'E-mail',
-        field: 'userEmail',
+        field: 'email',
         initialValue: email,
         rules: [{required: true, message: 'E-mail不能为空'}],
         placeholder: '请输入E-mail'
@@ -243,7 +213,7 @@ class SellerManage extends Component {
       [{
         type: 'INPUT',
         label: '地址',
-        field: 'userAddress',
+        field: 'address',
         initialValue: address,
         rules: [{required: true, message: '地址不能为空'}],
         placeholder: '请输入地址'
@@ -251,24 +221,16 @@ class SellerManage extends Component {
       [{
         type: 'INPUT',
         label: '批发商来源',
-        field: 'userSource',
+        field: 'source',
         initialValue: source,
         rules: [{required: true, message: '批发商来源不能为空'}],
         placeholder: '请输入批发商来源'
       }],
       [{
         type: 'SELECT',
-        label: '角色类型',
-        field: 'roleId',
-        initialValue: roleId.toString() !== '-1' ? roleId.toString() : '',
-        rules: [{required: true, message: '角色类型不能为空'}],
-        opts: roleList
-      }],
-      [{
-        type: 'SELECT',
         label: '是否启用',
         field: 'toggle',
-        initialValue: toggle,
+        initialValue: toggle ? toggle : '',
         rules: [{required: true, message: '是否启用不能为空'}],
         opts: [{value: '1', label: '是'}, {value: '0', label: '否'}]
       }],

@@ -1,5 +1,6 @@
-import {Button, Checkbox, Col, Form, Input, Row, Select} from "antd";
+import {Button, Checkbox, Col, DatePicker, Form, Input, Row, Select} from "antd";
 import React from "react";
+import moment from "moment";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -44,7 +45,7 @@ export default (formList, form, formItemLayout, formLayout) => {
             return <Col span={formLayout || 6} key={field}>
               <FormItem {...formItemLayout} label={label}>
                 {getFieldDecorator(field, {initialValue, rules})(
-                  <Select style={formLayout && {width: '200px'}} placeholder={placeholder}>
+                  <Select style={formLayout && {width: '300px'}} placeholder={placeholder}>
                     {opts.map((opt) => <Option value={opt.value} key={opt.value}>{opt.label}</Option>)}
                   </Select>)}
               </FormItem>
@@ -74,7 +75,7 @@ export default (formList, form, formItemLayout, formLayout) => {
                     {fieldList.map((checkBoxItem) => {
                       return <Col span={24} key={checkBoxItem.id}>
                         <Checkbox value={checkBoxItem.id}
-                                  disabled={checkBoxItem.toggle !== '1'}>{checkBoxItem.label}</Checkbox>
+                                  disabled={!checkBoxItem.toggle}>{checkBoxItem.label}</Checkbox>
                       </Col>
                     })}
                   </Checkbox.Group>
@@ -85,6 +86,26 @@ export default (formList, form, formItemLayout, formLayout) => {
           } else if (type === 'TABLE') {
             return <Col span={formLayout || 6} key={field}>
               {item.node}
+            </Col>
+          } else if (type === 'DATE') {
+            return <Col span={formLayout || 6} key={field}>
+              <FormItem {...formItemLayout} label={label}>
+                {getFieldDecorator(field, {initialValue, rules})(<DatePicker placeholder={placeholder}/>)}
+              </FormItem>
+            </Col>
+          } else if (type === 'MULTISELECT') {
+            return <Col span={formLayout || 6} key={field}>
+              <FormItem {...formItemLayout} label={label}>
+                {getFieldDecorator(field, {initialValue, rules})(
+                  <Select
+                    mode="multiple"
+                    style={formLayout && {width: '300px'}}
+                    placeholder={placeholder}
+                  >
+                    {opts.map((opt) => <Option value={opt.value} key={opt.value}>{opt.label}</Option>)}
+                  </Select>)
+                }
+              </FormItem>
             </Col>
           } else {
             return <Col span={formLayout || 6} key={field}/>;

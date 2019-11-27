@@ -12,10 +12,12 @@ import CollegeManage from './pages/collegeManage'
 import UserManage from './pages/userManage'
 import ClassManage from './pages/classManage'
 import ClassDetail from './pages/classManage/classDetail'
-import UserBookManage from './pages/userManage/bookManage'
 import BookManage from './pages/bookManage'
 import CourseManage from './pages/courseManage'
 import SellerManage from './pages/sellerManage'
+import UserBookManage from './pages/userBookManage'
+import QuoteManage from './pages/quoteManage'
+import BooKListManage from "./pages/bookListManage";
 
 export default class ERouter extends Component {
   render() {
@@ -41,7 +43,8 @@ export default class ERouter extends Component {
                          <Route path={'/book/list'} component={BookManage}/>
                          <Route path={'/course/list'} component={CourseManage}/>
                          <Route path={'/seller/list'} component={SellerManage}/>
-
+                         <Route path={'/quote/list'} component={QuoteManage}/>
+                         <Route path={'/bookList/list'} component={BooKListManage}/>
                          {/*<Redirect to={'/home'}/>*/}
                        </Switch>
                      </Admin>

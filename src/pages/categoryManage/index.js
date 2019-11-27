@@ -15,10 +15,11 @@ class CategoryManage extends Component {
       routerList: [],
       isTableLoading: true,
       modalFields: {
+        toggle:1,
         selectedList: [],
         roleName: '',
         id: '',
-        categoryId: ''
+        roleId: ''
       }
     }
   }
@@ -30,14 +31,14 @@ class CategoryManage extends Component {
     this.getRouterList();
   }
 
-  _setModalFields({toggle = '1', roleName = '', selectedList = [], id = '', categoryId = ''}) {
-    this.setState({modalFields: {toggle, roleName, selectedList, id, categoryId}})
+  _setModalFields({toggle = 1, roleName = '', selectedList = [], id = '', roleId = ''}) {
+    this.setState({modalFields: {toggle, roleName, selectedList, id, roleId}})
   }
 
   getRouterList() {
-    request('get', {url: api.getRouterList, data: {toggle: '2'}})
+    request('get', {url: api.getRouterList})
       .then(res => {
-        res.data.map(item => item.label = `${item.name}(${item.url})`);
+        res.data.map(item => item.label = `${item.routerName}(${item.routerUrl})`);
         this.setState({routerList: res ? res.data : []});
       })
       .catch(err => console.log(err));
@@ -53,29 +54,29 @@ class CategoryManage extends Component {
   renderTable() {
     const {isTableLoading: loading, tableList: dataSource} = this.state;
     const columns = [
-      {title: '角色名称', dataIndex: 'name'},
+      {title: '角色名称', dataIndex: 'roleName'},
       {
         title: '是否启用',
         dataIndex: 'toggle',
         width: 200,
         align: 'center',
-        render: (text, record) => record.toggle === '1' ? '已启用' : '未启用'
+        render: (text, record) => record.toggle  ? '已启用' : '未启用'
       },
       {
         title: '操作',
         dataIndex: 'unit',
         width: 100,
         align: 'center',
-        render: (text, record) => this.renterTableOperation(record)
+        render: (text, record) => this.renderTableOperation(record)
       }
     ];
     return <CardTable tableConfig={{dataSource, columns, loading, size: 'small', rowKey: (row) => row.id}}/>
   }
 
-  renterTableOperation(record) {
+  renderTableOperation(record) {
     const {switchVisible} = this.props;
-    const {toggle, name: roleName, router_ids, id, categoryId} = record;
-    const selectedList = router_ids ? router_ids.split(',') : [];
+    const {toggle, roleName, routerIds, id, roleId} = record;
+    const selectedList = routerIds ? routerIds.split(',') : [];
     return (
       <div className={'handleBox'}>
         <a onClick={() => {
@@ -84,7 +85,7 @@ class CategoryManage extends Component {
             roleName,
             selectedList: selectedList.map(i => parseInt(i, 10)),
             id,
-            categoryId
+            roleId
           });
           switchVisible({visible: true, title: '编辑角色菜单'})
         }}>修改权限</a>
@@ -95,13 +96,13 @@ class CategoryManage extends Component {
   //Modal
   handleSubmit(form) {
     const {modalFields, routerList: routers} = this.state;
-    const {id, categoryId} = modalFields;
+    const {id, roleId} = modalFields;
     let routerList = form.getFieldsValue()
       .routerList
       .filter(i => routers.some(r => r.id == i));
     request('post', {
-      url: categoryId ? api.updateCategory + categoryId : api.addCategory,
-      data: {routerList, roleId: id}
+      url: id ? api.updateCategory + id : api.addCategory,
+      data: {routerList, roleId}
     })
       .then(res => {
         message.success(res.message);

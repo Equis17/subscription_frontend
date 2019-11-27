@@ -24,9 +24,10 @@ class PopupModal extends Component {
         {...options}
         footer={null}
         width={600}
+        destroyOnClose={true}
         onCancel={() => {
-          resetValue && resetValue();
           switchVisible({visible: false, title: ''});
+          resetValue && resetValue()
         }}
       >
         {this.renderForm()}

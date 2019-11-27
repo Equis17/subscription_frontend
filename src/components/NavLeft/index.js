@@ -16,8 +16,8 @@ class NavLeft extends Component {
     request('get', {url: api.getRouterList, data: {toggle: '1'}})
       .then(res => {
         res.data.map(i => {
-          i.title = i.name;
-          i.key = i.url;
+          i.title = i.routerName;
+          i.key = i.routerUrl;
           return i;
         });
         this.props.getNavList(res.data);

@@ -16,8 +16,9 @@ class BookManage extends Component {
       isTableLoading: true,
       modalFields: {
         bookName: '',
-        isbn: '',
+        ISBN: '',
         toggle: '1',
+        status:'',
         id: ''
       },
       searchFilter: {}
@@ -30,8 +31,8 @@ class BookManage extends Component {
     this.getBookList()
   }
 
-  _setModalFields({bookName = '', isbn = '', id = '', toggle = '1'}) {
-    this.setState({modalFields: {bookName, isbn, id, toggle}})
+  _setModalFields({bookName = '', ISBN = '', status = '', id = '', toggle = '1'}) {
+    this.setState({modalFields: {bookName, ISBN, status, id, toggle}})
   }
 
   getBookList(fields) {
@@ -70,6 +71,17 @@ class BookManage extends Component {
             }
           }]
         }
+      ],
+      [
+        {
+          type: 'SELECT', label: '教材状态', field: 'status', initialValue: '',
+          opts: [
+            {value: '2', label: '审核通过'},
+            {value: '3', label: '审核失败'},
+            {value: '1', label: '审核中'},
+            {value: '', label: '全部'}
+          ]
+        }
       ]
     ]
   }
@@ -88,33 +100,43 @@ class BookManage extends Component {
   renderTable() {
     const {isTableLoading: loading, tableList: dataSource} = this.state;
     const columns = [
-      {title: '教材名称', dataIndex: 'name'},
-      {title: 'isbn', dataIndex: 'isbn'},
+      {title: '教材名称', dataIndex: 'bookName'},
+      {title: 'isbn', dataIndex: 'ISBN'},
+      {
+        title: '教材状态',
+        dataIndex: 'status',
+        width: 200,
+        align: 'center',
+        render: (text, record) => {
+          return {1: '审核中', 2: '审核通过', 3: '审核失败'}[record.status]
+        }
+
+      },
       {
         title: '是否启用',
         dataIndex: 'toggle',
         width: 200,
         align: 'center',
-        render: (text, record) => record.toggle === '1' ? '已启用' : '未启用'
+        render: (text, record) => record.toggle ? '已启用' : '未启用'
       },
       {
         title: '操作',
         dataIndex: 'unit',
         width: 100,
         align: 'center',
-        render: (text, record) => this.renterTableOperation(record)
+        render: (text, record) => this.renderTableOperation(record)
       }
     ];
     return <CardTable tableConfig={{dataSource, columns, loading, size: 'small', rowKey: (row) => row.id}}/>
   }
 
-  renterTableOperation(record) {
+  renderTableOperation(record) {
     const {switchVisible} = this.props;
-    const {toggle, name: bookName, isbn, id} = record;
+    const {toggle, bookName, ISBN, status, id} = record;
     return (
       <div className={'handleBox'}>
         <a onClick={() => {
-          this._setModalFields({toggle, bookName, isbn, id});
+          this._setModalFields({toggle, bookName, ISBN, status, id});
           switchVisible({visible: true, title: '编辑教材'})
         }}>编辑</a>
         <span>|</span>
@@ -148,11 +170,11 @@ class BookManage extends Component {
   }
 
   renderModal() {
-    return <PopupModal resetValue={()=>this._setModalFields({})} createMethod={form => this._createModalForm(form)}/>
+    return <PopupModal resetValue={() => this._setModalFields({})} createMethod={form => this._createModalForm(form)}/>
   }
 
   _createModalForm(form) {
-    const {toggle, bookName, isbn} = this.state.modalFields;
+    const {toggle, bookName, ISBN, status} = this.state.modalFields;
     return [
       [{
         type: 'INPUT',
@@ -166,15 +188,27 @@ class BookManage extends Component {
         type: 'INPUT',
         label: 'ISBN',
         field: 'ISBN',
-        initialValue: isbn,
+        initialValue: ISBN,
         rules: [{required: true, message: 'ISBN不能为空'}],
         placeholder: '请输入ISBN'
       }],
       [{
         type: 'SELECT',
+        label: '教材状态',
+        field: 'status',
+        initialValue: status ? status.toString() : '',
+        rules: [{required: true, message: '是否启用不能为空'}],
+        opts: [
+          {value: '1', label: '审核中'},
+          {value: '2', label: '审核通过'},
+          {value: '3', label: '审核失败'},
+        ]
+      }],
+      [{
+        type: 'SELECT',
         label: '是否启用',
         field: 'toggle',
-        initialValue: toggle,
+        initialValue: toggle ? '1' : '0',
         rules: [{required: true, message: '是否启用不能为空'}],
         opts: [{value: '1', label: '是'}, {value: '0', label: '否'}]
       }],
