@@ -18,12 +18,12 @@ class SearchBox extends Component {
     return (
       <Card title={'查询'}
             size={'small'}
-            extra={
-              <div>
+            extra={title
+              ? <div>
                 <Button type={'primary'} icon={'plus'} onClick={() => switchVisible({visible: true, title})}>新增</Button>
                 <Button type={'danger'} icon={'redo'} onClick={() => form.resetFields()}>重置</Button>
               </div>
-            }
+              : ''}
       >
         <Row>
           <Form>

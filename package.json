@@ -2,6 +2,7 @@
   "name": "subscription_sys",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:5000",
   "dependencies": {
     "antd": "^3.4.3",
     "autoprefixer": "7.1.6",
@@ -36,6 +37,7 @@
     "jest": "20.0.4",
     "jsencrypt": "^3.0.0-rc.1",
     "jsonp": "^0.2.1",
+    "jwt-decode": "^2.2.0",
     "less": "^2.7.3",
     "less-loader": "^4.1.0",
     "lodash": "latest",
@@ -71,6 +73,7 @@
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom"
   },
+
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,mjs}"

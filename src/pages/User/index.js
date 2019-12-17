@@ -7,6 +7,7 @@ import {Popconfirm, message} from "antd";
 import JSEncrypt from 'jsencrypt';
 import request from "../../utils/request";
 import api from "../../config/api";
+import {ruleObj} from "../../utils/utils";
 
 class UserManage extends Component {
   constructor(props) {
@@ -200,14 +201,23 @@ class UserManage extends Component {
         label: '用户名',
         field: 'account',
         initialValue: account,
-        rules: [{required: true, message: '用户名不能为空'}],
+        rules: [
+          {required: true, message: '用户名不能为空'},
+          ruleObj.maxChar,
+          ruleObj.minChar,
+          ruleObj.whitespace
+        ],
         placeholder: '请输入用户名'
       }],
       [{
         type: 'PASSWORD',
         label: '密码',
         field: 'password',
-        rules: [{required: true, message: '密码不能为空'}],
+        rules: [
+          {required: true, message: '密码不能为空'},
+          ruleObj.maxChar,
+          ruleObj.minChar,
+          ruleObj.whitespace],
         placeholder: '请输入密码'
       }],
       [{
@@ -215,7 +225,12 @@ class UserManage extends Component {
         label: '真实姓名',
         field: 'realName',
         initialValue: realName,
-        rules: [{required: true, message: '真实姓名不能为空'}],
+        rules: [
+          {required: true, message: '真实姓名不能为空'},
+          ruleObj.whitespace,
+          {max: 10, message: '最大10个字符'},
+          {min: 2, message: '最小2个字符'}
+        ],
         placeholder: '请输入真实姓名'
       }],
       [{
@@ -223,7 +238,11 @@ class UserManage extends Component {
         label: '手机号码',
         field: 'phoneNumber',
         initialValue: phoneNumber,
-        rules: [{required: true, message: '手机号码不能为空'}],
+        rules: [
+          {required: true, message: '手机号码不能为空'},
+          ruleObj.whitespace,
+          ruleObj.phoneNumber
+          ],
         placeholder: '请输入手机号码'
       }],
       [{

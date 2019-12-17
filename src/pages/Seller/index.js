@@ -9,6 +9,7 @@ import {actionCreators as NavLeftAction} from "../../components/NavLeft/store";
 import {actionCreators as PopupModalAction} from "../../components/PopupModal/store";
 import {connect} from "react-redux";
 import JSEncrypt from 'jsencrypt'
+import {ruleObj} from "../../utils/utils";
 
 class SellerManage extends Component {
   constructor(props) {
@@ -184,14 +185,24 @@ class SellerManage extends Component {
         label: '姓名',
         field: 'sellerName',
         initialValue: sellerName,
-        rules: [{required: true, message: '不能为空'}],
+        rules: [
+          {required: true, message: '不能为空'},
+          ruleObj.whitespace,
+          {min: 2, message: "最小2个字符"},
+          {max: 10, message: "最大10个字符"}
+        ],
         placeholder: '请输入姓名'
       }],
       [{
         type: 'PASSWORD',
         label: '密码',
         field: 'password',
-        rules: [{required: true, message: '密码不能为空'}],
+        rules: [
+          {required: true, message: '密码不能为空'},
+          ruleObj.maxChar,
+          ruleObj.minChar,
+          ruleObj.whitespace
+        ],
         placeholder: '请输入密码'
       }],
       [{
@@ -199,7 +210,10 @@ class SellerManage extends Component {
         label: '手机号码',
         field: 'phoneNumber',
         initialValue: phoneNumber,
-        rules: [{required: true, message: '手机号码不能为空'}],
+        rules: [
+          {required: true, message: '手机号码不能为空'},
+          ruleObj.phoneNumber
+        ],
         placeholder: '请输入手机号码'
       }],
       [{
@@ -215,7 +229,9 @@ class SellerManage extends Component {
         label: '地址',
         field: 'address',
         initialValue: address,
-        rules: [{required: true, message: '地址不能为空'}],
+        rules: [
+          {required: true, message: '地址不能为空'},
+          ],
         placeholder: '请输入地址'
       }],
       [{

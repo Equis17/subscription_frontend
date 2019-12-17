@@ -1,0 +1,52 @@
+@import url(./../../style/default);
+
+.login {
+  height: 100%;
+  width: 100%;
+
+  &-header {
+    width: 100%;
+    height: 80px;
+    padding: 0 180px;
+    background-color: #001529;
+    color: #ffffff;
+
+    span {
+      line-height: 80px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    img {
+      margin-top: 15px;
+      margin-right: 15px;
+      height: 50px;
+      float: left;
+    }
+  }
+
+  &-modal {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 50px 100px 100px 100px;
+    border: 1px solid #eee;
+    box-shadow: 2px 2px 2px 2px #ccc;
+    background-color: #ffffff;
+    width: 600px;
+    height: 500px;
+
+    &-title {
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      color: #777;
+    }
+  }
+
+  &-wrap {
+    width: 100%;
+    height: calc(90vh);
+  }
+}

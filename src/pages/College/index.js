@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 import {Popconfirm, message} from "antd";
 import request from "../../utils/request";
 import api from "../../config/api";
+import {ruleObj} from "../../utils/utils";
 
 class CollegeManage extends Component {
   constructor(props) {
@@ -158,7 +159,12 @@ class CollegeManage extends Component {
         label: '学院名称',
         field: 'collegeName',
         initialValue: collegeName,
-        rules: [{required: true, message: '学院名称不能为空'}],
+        rules: [
+          {required: true, message: '学院名称不能为空'},
+          ruleObj.maxChar,
+          ruleObj.minChar,
+          ruleObj.whitespace
+          ],
         placeholder: '请输入学院名称'
       }],
       [{

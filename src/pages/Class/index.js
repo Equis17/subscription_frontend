@@ -9,8 +9,7 @@ import api from "../../config/api";
 import CardTable from "../../components/CardTable";
 import {message, Popconfirm} from "antd";
 import {PopupModal} from "../../components";
-
-//TODO  带上stu_class
+import {ruleObj} from "../../utils/utils";
 
 class ClassManage extends Component {
   constructor(props) {
@@ -207,7 +206,12 @@ class ClassManage extends Component {
         label: '班级名称',
         field: 'className',
         initialValue: className,
-        rules: [{required: true, message: '班级名称不能为空'}],
+        rules: [
+          {required: true, message: '班级名称不能为空'},
+          ruleObj.minChar,
+          ruleObj.maxChar,
+          ruleObj.whitespace
+          ],
         placeholder: '请输入班级名称'
       }],
       [{

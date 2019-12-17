@@ -58,7 +58,7 @@ if (process.env.HOST) {
   console.log();
 }
 
-// We attempt to use the default port but if it is busy, we offer the userManage to
+// We attempt to use the default port but if it is busy, we offer the User to
 // run on a different port. `choosePort()` Promise resolves to the next free port.
 choosePort(HOST, DEFAULT_PORT)
   .then(port => {

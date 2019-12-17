@@ -9,6 +9,7 @@ import {actionCreators as NavLeftAction} from "../../components/NavLeft/store";
 import {actionCreators as PopupModalAction} from "../../components/PopupModal/store";
 import {connect} from "react-redux";
 import {PopupModal} from "../../components";
+import {ruleObj} from "../../utils/utils";
 
 class SysManage extends Component {
   constructor(props) {
@@ -197,14 +198,24 @@ class SysManage extends Component {
         label: '用户名',
         field: 'userAccount',
         initialValue: account,
-        rules: [{required: true, message: '用户名不能为空'}],
+        rules: [
+          {required: true, message: '用户名不能为空'},
+          ruleObj.minChar,
+          ruleObj.maxChar,
+          ruleObj.whitespace
+        ],
         placeholder: '请输入用户名'
       }],
       [{
         type: 'PASSWORD',
         label: '密码',
         field: 'userPassword',
-        rules: [{required: true, message: '密码不能为空'}],
+        rules: [
+          {required: true, message: '密码不能为空'},
+          ruleObj.minChar,
+          ruleObj.maxChar,
+          ruleObj.whitespace
+        ],
         placeholder: '请输入密码'
       }],
       [{
@@ -212,7 +223,12 @@ class SysManage extends Component {
         label: '真实姓名',
         field: 'userRealName',
         initialValue: realName,
-        rules: [{required: true, message: '真实姓名不能为空'}],
+        rules: [
+          {required: true, message: '真实姓名不能为空'},
+          {max: 10, message: '最大为10个字符'},
+          {min: 2, message: '最小为2个字符'},
+          ruleObj.whitespace
+        ],
         placeholder: '请输入真实姓名'
       }],
       [{
@@ -220,7 +236,11 @@ class SysManage extends Component {
         label: '手机号码',
         field: 'userPhoneNumber',
         initialValue: phoneNumber,
-        rules: [{required: true, message: '手机号码不能为空'}],
+        rules: [
+          {required: true, message: '手机号码不能为空'},
+          ruleObj.phoneNumber,
+          ruleObj.whitespace
+        ],
         placeholder: '请输入手机号码'
       }],
       [{
@@ -274,7 +294,6 @@ class SysManage extends Component {
     );
   }
 }
-
 
 const mapDispatchToProps = (dispatch) => ({
   switchMenuKey: (patch) => dispatch(NavLeftAction.switchMenuKey(patch)),

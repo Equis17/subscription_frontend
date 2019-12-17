@@ -1,23 +1,40 @@
 import React, {Component} from 'react'
-import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom'
+import {BrowserRouter, Route, Switch} from 'react-router-dom'
 import App from './App'
 import Admin from './admin'
-import Home from './pages/home'
-import Login from './pages/login'
-import RouterManage from './pages/routerManage'
-import RoleManage from './pages/roleManage'
-import CategoryManage from './pages/categoryManage'
+import Home from './pages/Home'
+import Login from './pages/Login'
+import RouterManage from './pages/Router'
+import RoleManage from './pages/Role'
+import CategoryManage from './pages/Category'
 import SysManage from './pages/sysManage'
-import CollegeManage from './pages/collegeManage'
-import UserManage from './pages/userManage'
-import ClassManage from './pages/classManage'
-import ClassDetail from './pages/classManage/classDetail'
-import BookManage from './pages/bookManage'
-import CourseManage from './pages/courseManage'
-import SellerManage from './pages/sellerManage'
-import UserBookManage from './pages/userBookManage'
-import QuoteManage from './pages/quoteManage'
-import BooKListManage from "./pages/bookListManage";
+import CollegeManage from './pages/College'
+import UserManage from './pages/User'
+import ClassManage from './pages/Class'
+import ClassDetail from './pages/Class/classDetail'
+import BookManage from './pages/Book'
+import CourseManage from './pages/Course'
+import SellerManage from './pages/Seller'
+import UserBookManage from './pages/UserBook'
+import QuoteManage from './pages/Quote'
+import BooKListManage from "./pages/BookList";
+import AssignManage from "./pages/Assign";
+import UserInfo from "./pages/User/userInfo";
+import BookListInfo from "./pages/BookList/info";
+import AssignerManage from './pages/Assign/assigner'
+import BookingListManage from "./pages/BookingList";
+import SubscriptionManage from "./pages/Subscription";
+import BookManageInfo from "./pages/Book/info";
+import BookListManageEdit from "./pages/BookList/edit";
+import QuoteManageInfo from "./pages/Quote/info";
+import QuoteManageToSub from "./pages/Quote/toSub";
+import UserBookManageInfo from "./pages/UserBook/info";
+import BookManageQuote from "./pages/Book/quote";
+import OrderManage from "./pages/Order";
+import OrderManageEdit from "./pages/Order/edit";
+import OrderManageInfo from "./pages/Order/info";
+import AssignManageBookList from "./pages/Assign/bookList";
+import AssignManageInfo from "./pages/Assign/info";
 
 export default class ERouter extends Component {
   render() {
@@ -25,12 +42,12 @@ export default class ERouter extends Component {
       <BrowserRouter>
         <App>
           <Switch>
-            <Route path={'/login'} component={Login}/>
+            <Route path={'/Login'} component={Login}/>
             <Route path={'/'}
                    render={() =>
                      <Admin>
                        <Switch>
-                         <Route path={'/home'} component={Home}/>
+                         <Route path={'/Home'} component={Home}/>
                          <Route path={'/router/list'} component={RouterManage}/>
                          <Route path={'/role/list'} component={RoleManage}/>
                          <Route path={'/category/list'} component={CategoryManage}/>
@@ -45,7 +62,24 @@ export default class ERouter extends Component {
                          <Route path={'/seller/list'} component={SellerManage}/>
                          <Route path={'/quote/list'} component={QuoteManage}/>
                          <Route path={'/bookList/list'} component={BooKListManage}/>
-                         {/*<Redirect to={'/home'}/>*/}
+                         <Route path={'/assign/list'} component={AssignManage}/>
+                         <Route path={'/user/userInfo'} component={UserInfo}/>
+                         <Route path={'/bookList/info'} component={BookListInfo}/>
+                         <Route path={'/assignerManage/list'} component={AssignerManage}/>
+                         <Route path={'/bookingList/list'} component={BookingListManage}/>
+                         <Route path={'/subscription/list'} component={SubscriptionManage}/>
+                         <Route path={'/book/info'} component={BookManageInfo}/>
+                         <Route path={'/bookList/edit'} component={BookListManageEdit}/>
+                         <Route path={'/quote/info'} component={QuoteManageInfo}/>
+                         <Route path={'/quote/toSub'} component={QuoteManageToSub}/>
+                         <Route path={'/userBook/info'} component={UserBookManageInfo}/>
+                         <Route path={'/book/quote'} component={BookManageQuote}/>
+                         <Route path={'/order/list'} component={OrderManage}/>
+                         <Route path={'/order/edit'} component={OrderManageEdit}/>
+                         <Route path={'/assign/bookList'} component={AssignManageBookList}/>
+                         <Route path={'/assign/info'} component={AssignManageInfo}/>
+                         <Route path={'/order/info'} component={OrderManageInfo}/>
+                         {/*<Redirect to={'/Home'}/>*/}
                        </Switch>
                      </Admin>
                    }

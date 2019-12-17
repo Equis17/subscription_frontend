@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 import {Popconfirm, message} from "antd";
 import request from "../../utils/request";
 import api from "../../config/api";
+import {ruleObj} from "../../utils/utils";
 
 class RoleManage extends Component {
   constructor(props) {
@@ -158,7 +159,12 @@ class RoleManage extends Component {
         label: '角色名称',
         field: 'roleName',
         initialValue: roleName,
-        rules: [{required: true, message: '角色名称不能为空'}],
+        rules: [
+          {required: true, message: '角色名称不能为空'},
+          ruleObj.maxChar,
+          ruleObj.minChar,
+          ruleObj.whitespace
+          ],
         placeholder: '请输入角色名称'
       }],
       [{

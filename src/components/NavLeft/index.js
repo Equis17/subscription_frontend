@@ -13,7 +13,8 @@ const {SubMenu, Item: MenuItem} = Menu;
 class NavLeft extends Component {
 
   componentDidMount() {
-    request('get', {url: api.getRouterList, data: {toggle: '1'}})
+    //TODO 解决前端根据权限获取菜单
+    request('get', {url: api.getUserCategory})
       .then(res => {
         res.data.map(i => {
           i.title = i.routerName;
@@ -56,10 +57,10 @@ class NavLeft extends Component {
     const {menuKey, navListData} = this.props;
     return (
       <div>
-        <NavLink to={'/home'}>
+        <NavLink to={'/Home'}>
           <div className={'logo'}>
             <img src="/assets/logo-ant.svg" alt=""/>
-            <span>Title</span>
+            <span>高校教材征订系统</span>
           </div>
         </NavLink>
         <Menu

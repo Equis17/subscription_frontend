@@ -7,8 +7,8 @@ import api from "../../config/api";
 import SearchBox from "../../components/SearchBox";
 import CardTable from "../../components/CardTable";
 import {message, Popconfirm} from "antd";
-import moment from "moment";
 import {PopupModal} from "../../components";
+import {ruleObj} from "../../utils/utils";
 
 class BooKListManage extends Component {
   constructor(props) {
@@ -16,9 +16,11 @@ class BooKListManage extends Component {
     this.state = {
       isTableLoading: true,
       bookList: [],
+      tableList: [],
       bookLists: [],
       classList: [],
       collegeList: [],
+      subscriptionList: [],
       modalFields: {
         id: '',
         bookListName: '',
@@ -26,9 +28,11 @@ class BooKListManage extends Component {
         toggle: '',
         bookIds: '',
         classIds: '',
-        startTime: '',
-        endTime: ''
-      }
+        subscriptionId: '',
+        subscriptionName: '',
+        status: '',
+      },
+      searchFilter: {}
     }
   }
 
@@ -39,12 +43,12 @@ class BooKListManage extends Component {
       .then(() => this.getBookLists())
   }
 
-  _setModalFields({id = '', bookListName = '', collegeId = '', toggle = '', bookIds = '', classIds = '', startTime = '', endTime = ''}) {
-    this.setState({modalFields: {id, bookListName, collegeId, toggle, bookIds, classIds, startTime, endTime}});
+  _setModalFields({id = '', bookListName = '', collegeId = '', toggle = '', bookIds = '', classIds = '', subscriptionId = ''}) {
+    this.setState({modalFields: {id, bookListName, collegeId, toggle, bookIds, classIds, subscriptionId}});
   }
 
   getSelectList() {
-    return request('get', {url: api.getBookList, data: {toggle: '1'}})
+    return request('get', {url: api.getBookList, data: {toggle: '1', status: '2'}})
       .then(res => {
         res.data.map(i => {
           i.value = i.id.toString();
@@ -70,10 +74,18 @@ class BooKListManage extends Component {
           return i;
         });
         this.setState({collegeList: res ? res.data : []});
+        return request('get', {url: api.getSubscriptionList})
+      })
+      .then(res => {
+        res.data.map(i => {
+          i.value = i.id.toString();
+          i.label = i.subscriptionName;
+          return i;
+        });
+        this.setState({subscriptionList: res ? res.data : []});
       })
       .catch(err => console.log(err));
   }
-
 
   getBookLists(fields) {
     const {bookList, classList} = this.state;
@@ -84,16 +96,21 @@ class BooKListManage extends Component {
         const data = res.data ? res.data : [];
         this.setState({
           isTableLoading: false,
-          tableList: data.map(item => ({
-            ...item,
-            classNameList: item.classIds.split(',')
-              .map(num => classList.filter(className => className.id.toString() === num)[0]['className'])
-              .join(',\n'),
-            bookNameList: item.bookIds.split(',')
-              .map(num => bookList.filter(book => book.id.toString() === num)[0]['bookName'])
-              .join(',\n')
-
-          }))
+          tableList: data.map(item => {
+            const classNameList = item.classIds.split(',')
+              .map(num => {
+                const info = classList.filter(className => className.id.toString() === num);
+                return info.length > 0 ? info[0]['className'] : ''
+              })
+              .join(',\n');
+            const bookNameList = item.bookIds.split(',')
+              .map(num => {
+                const info = bookList.filter(book => book.id.toString() === num);
+                return info.length > 0 ? info[0]['bookName'] : ''
+              })
+              .join(',\n');
+            return {...item, classNameList, bookNameList}
+          })
         })
       })
   }
@@ -107,7 +124,7 @@ class BooKListManage extends Component {
   renderSearchBox = () => <SearchBox title={'新增书单'} createMethod={(form) => this._createSearchForm(form)}/>;
 
   _createSearchForm(form) {
-    const {collegeList} = this.state;
+    const {collegeList, subscriptionList} = this.state;
     return [
       [
         {type: 'INPUT', label: '书单名称', field: 'bookListName'},
@@ -131,6 +148,12 @@ class BooKListManage extends Component {
             }
           }]
         }
+      ],
+      [
+        {
+          type: 'SELECT', label: '征订年份', field: 'subscriptionId', initialValue: '',
+          opts: [...subscriptionList, {value: '', label: '全部'}]
+        }
       ]
     ]
   }
@@ -148,17 +171,11 @@ class BooKListManage extends Component {
     const columns = [
       {title: '书单名称', dataIndex: 'bookListName'},
       {title: '所属学院', dataIndex: 'collegeName'},
+      {title: '征订年份', dataIndex: 'subscriptionName'},
       {
-        title: '征订时间',
-        dataIndex: 'startTime',
-        render: (text) => moment(text)
-          .format('YYYY-MM-DD')
-      },
-      {
-        title: '结束时间',
-        dataIndex: 'endTime',
-        render: (text) => moment(text)
-          .format('YYYY-MM-DD')
+        title: '征订状态',
+        dataIndex: 'status',
+        render: (text) => ({'0': '未开始', '1': '开始征订', '2': '结束征订', '3': '开始预订', '4': '结束预订', '5': '结束'}[text])
       },
       {title: '是否启用', dataIndex: 'toggle', render: (text, record) => record.toggle ? '已启用' : '未启用'},
       {
@@ -174,11 +191,11 @@ class BooKListManage extends Component {
 
   renderTableOperation(record) {
     const {switchVisible} = this.props;
-    const {id, bookListName, collegeId, toggle, bookIds, classIds, startTime, endTime} = record;
+    const {id, bookListName, collegeId, toggle, bookIds, classIds, subscriptionId} = record;
     return (
       <div className={'handleBox'}>
         <a onClick={() => {
-          this._setModalFields({id, bookListName, collegeId, toggle, bookIds, classIds, startTime, endTime});
+          this._setModalFields({id, bookListName, collegeId, toggle, bookIds, classIds, subscriptionId});
           switchVisible({visible: true, title: '编辑书单'})
         }}>编辑</a>
         <span>|</span>
@@ -198,17 +215,14 @@ class BooKListManage extends Component {
   handleSubmit(form) {
     const {searchFilter, modalFields} = this.state;
     const {id} = modalFields;
-    form.validateFields(['bookIds', 'classIds', 'toggle', 'startTime', 'endTime', 'bookListName', 'collegeId'], err => {
+    form.validateFields(['bookIds', 'classIds', 'toggle', 'subscriptionId', 'bookListName', 'collegeId'], err => {
       if (!err) {
-        const {bookIds, classIds, toggle, startTime, endTime, bookListName, collegeId} = form.getFieldsValue();
+        console.log(form.getFieldsValue());
+        const {bookIds, classIds, toggle, subscriptionId, bookListName, collegeId} = form.getFieldsValue();
         request('post', {
           url: id ? api.updateBookLists + id : api.addBookLists,
           data: {
-            toggle, bookListName, collegeId,
-            startTime: moment(startTime)
-              .format('YYYY-MM-DD'),
-            endTime: moment(endTime)
-              .format('YYYY-MM-DD'),
+            toggle, bookListName, collegeId, subscriptionId,
             bookIds: bookIds.join(','),
             classIds: classIds.join(',')
           }
@@ -229,15 +243,19 @@ class BooKListManage extends Component {
   }
 
   _createModalForm(form) {
-    const {bookList, collegeList, classList, modalFields} = this.state;
-    const {bookListName, collegeId, toggle, bookIds, classIds, startTime, endTime} = modalFields;
+    const {bookList, collegeList, classList, modalFields, subscriptionList} = this.state;
+    const {bookListName, collegeId, toggle, bookIds, classIds, subscriptionId} = modalFields;
     return [
       [{
         type: 'INPUT',
         label: '书单名称',
         field: 'bookListName',
         initialValue: bookListName,
-        rules: [{required: true, message: '书单名称不能为空'}],
+        rules: [
+          {required: true, message: '书单名称不能为空'},
+          ruleObj.maxChar,
+          ruleObj.whitespace,
+          ],
         placeholder: '请输入书单名称'
       }],
       [{
@@ -249,12 +267,19 @@ class BooKListManage extends Component {
         opts: collegeList
       }],
       [{
+        type: 'SELECT',
+        label: '征订年份',
+        field: 'subscriptionId',
+        initialValue: subscriptionId.toString() ? subscriptionId.toString() : '',
+        rules: [{required: true, message: '征订年份不能为空'}],
+        opts: subscriptionList
+      }],
+      [{
         type: 'MULTISELECT',
         label: '书单',
         field: 'bookIds',
         initialValue: bookIds ? bookIds.split(',') : [],
         opts: bookList,
-        rules: [{required: true, message: '书单不能为空'}],
       }],
       [{
         type: 'MULTISELECT',
@@ -271,20 +296,6 @@ class BooKListManage extends Component {
         initialValue: toggle ? '1' : '0',
         rules: [{required: true, message: '开课单位不能为空'}],
         opts: [{value: '1', label: '是'}, {value: '0', label: '否'}]
-      }],
-      [{
-        type: 'DATE',
-        label: '征订时间',
-        field: 'startTime',
-        initialValue: startTime ? moment(startTime) : moment(),
-        rules: [{required: true, message: '征订时间不能为空'}],
-      }],
-      [{
-        type: 'DATE',
-        label: '结束时间',
-        field: 'endTime',
-        initialValue: endTime ? moment(endTime) : moment(),
-        rules: [{required: true, message: '结束时间不能为空'}],
       }],
       [{
         type: 'BUTTON',

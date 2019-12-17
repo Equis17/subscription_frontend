@@ -1,23 +1,24 @@
 import React, {Component} from 'react'
+import {actionCreators as NavLeftAction} from "../../components/NavLeft/store";
+import {actionCreators as PopupModalAction} from "../../components/PopupModal/store";
 import {connect} from "react-redux";
-import {SearchBox, CardTable, PopupModal} from '../../components';
-import {actionCreators as NavLeftAction} from './../../components/NavLeft/store'
-import {actionCreators as PopupModalAction} from './../../components/PopupModal/store'
+import api from "../../config/api";
+import request from "../../utils/request";
+import SearchBox from "../../components/SearchBox";
 import {message, Popconfirm} from "antd";
+import {CardTable, PopupModal} from "../../components";
 
-import api from '../../config/api'
-import request from '../../utils/request'
-
-class RouterManage extends Component {
+class BookManage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       tableList: [],
       isTableLoading: true,
       modalFields: {
+        bookName: '',
+        ISBN: '',
         toggle: '1',
-        routerName: '',
-        routerUrl: '',
+        status:'',
         id: ''
       },
       searchFilter: {}
@@ -27,16 +28,16 @@ class RouterManage extends Component {
   componentDidMount() {
     const {switchMenuKey, match} = this.props;
     switchMenuKey(match.path);
-    this.getRouterList({});
+    this.getBookList()
   }
 
-  _setModalFields({toggle = '1', routerName = '', routerUrl = '', id = ''}) {
-    this.setState({modalFields: {toggle, routerName, routerUrl, id}})
+  _setModalFields({bookName = '', ISBN = '', status = '', id = '', toggle = '1'}) {
+    this.setState({modalFields: {bookName, ISBN, status, id, toggle}})
   }
 
-  getRouterList(fields) {
+  getBookList(fields) {
     this.setState({isTableLoading: true});
-    request('get', {url: api.getRouterList, data: fields})
+    request('get', {url: api.getBookList, data: fields})
       .then(res => this.setState({tableList: res ? res.data : [], isTableLoading: false}))
       .catch(err => console.log(err));
   }
@@ -44,16 +45,16 @@ class RouterManage extends Component {
   //SearchBox
   handleSearch = (fields) => {
     this.setState({searchFilter: fields});
-    this.getRouterList(fields);
+    this.getBookList(fields);
   };
 
-  renderSearchBox = () => <SearchBox title={'新增路由'} createMethod={(form) => this._createSearchForm(form)}/>;
+  renderSearchBox = () => <SearchBox title={'新增教材'} createMethod={(form) => this._createSearchForm(form)}/>;
 
   _createSearchForm(form) {
     return [
       [
-        {type: 'INPUT', label: '路由名称', field: 'routerName'},
-        {type: 'INPUT', label: '路由地址', field: 'routerUrl',},
+        {type: 'INPUT', label: '书名', field: 'bookName'},
+        {type: 'INPUT', label: 'ISBN', field: 'isbn'},
         {
           type: 'SELECT', label: '是否启用', field: 'toggle', initialValue: '1',
           opts: [{value: '1', label: '是'}, {value: '0', label: '否'}, {value: '', label: '全部'}]
@@ -70,17 +71,28 @@ class RouterManage extends Component {
             }
           }]
         }
+      ],
+      [
+        {
+          type: 'SELECT', label: '教材状态', field: 'status', initialValue: '',
+          opts: [
+            {value: '2', label: '审核通过'},
+            {value: '3', label: '审核失败'},
+            {value: '1', label: '审核中'},
+            {value: '', label: '全部'}
+          ]
+        }
       ]
     ]
   }
 
-  //Table
+//Table
   handleDelete(id) {
     const {searchFilter} = this.state;
-    request('post', {url: api.deleteRouter + id})
+    request('post', {url: api.deleteBook + id})
       .then(res => {
         message.success(res.message);
-        this.getRouterList(searchFilter);
+        this.getBookList(searchFilter);
       })
       .catch(err => console.log(err))
   }
@@ -88,14 +100,24 @@ class RouterManage extends Component {
   renderTable() {
     const {isTableLoading: loading, tableList: dataSource} = this.state;
     const columns = [
-      {title: '路由名称', dataIndex: 'routerName'},
-      {title: '路由地址', dataIndex: 'routerUrl'},
+      {title: '教材名称', dataIndex: 'bookName'},
+      {title: 'isbn', dataIndex: 'ISBN'},
+      {
+        title: '教材状态',
+        dataIndex: 'status',
+        width: 200,
+        align: 'center',
+        render: (text, record) => {
+          return {1: '审核中', 2: '审核通过', 3: '审核失败'}[record.status]
+        }
+
+      },
       {
         title: '是否启用',
         dataIndex: 'toggle',
         width: 200,
         align: 'center',
-        render: (text, record) => record.toggle? '已启用' : '未启用'
+        render: (text, record) => record.toggle ? '已启用' : '未启用'
       },
       {
         title: '操作',
@@ -110,16 +132,16 @@ class RouterManage extends Component {
 
   renderTableOperation(record) {
     const {switchVisible} = this.props;
-    const {toggle, routerName, routerUrl, id} = record;
+    const {toggle, bookName, ISBN, status, id} = record;
     return (
       <div className={'handleBox'}>
         <a onClick={() => {
-          this._setModalFields({toggle, routerName, routerUrl, id});
-          switchVisible({visible: true, title: '编辑路由'})
+          this._setModalFields({toggle, bookName, ISBN, status, id});
+          switchVisible({visible: true, title: '编辑教材'})
         }}>编辑</a>
         <span>|</span>
         <Popconfirm
-          title={'是否删除该路由?'}
+          title={'是否删除该教材?'}
           okText={'确认'}
           cancelText={'取消'}
           onConfirm={() => this.handleDelete(record.id)}
@@ -134,13 +156,13 @@ class RouterManage extends Component {
   handleSubmit(form) {
     const {searchFilter, modalFields} = this.state;
     const {id} = modalFields;
-    form.validateFields(['routerName', 'routerUrl', 'toggle'], err => {
-      !err && request('post', {url: id ? api.updateRouter + id : api.addRouter, data: form.getFieldsValue()})
+    form.validateFields(err => {
+      !err && request('post', {url: id ? api.updateBook + id : api.addBook, data: form.getFieldsValue()})
         .then(res => {
           message.success(res.message);
           this.props.switchVisible({visible: false, title: ''});
           this._setModalFields({});
-          this.getRouterList(searchFilter);
+          this.getBookList(searchFilter);
         })
         .catch(err => console.log(err))
     })
@@ -148,33 +170,45 @@ class RouterManage extends Component {
   }
 
   renderModal() {
-    return <PopupModal resetValue={()=>this._setModalFields({})} createMethod={form => this._createModalForm(form)}/>
+    return <PopupModal resetValue={() => this._setModalFields({})} createMethod={form => this._createModalForm(form)}/>
   }
 
   _createModalForm(form) {
-    const {toggle, routerName, routerUrl} = this.state.modalFields;
+    const {toggle, bookName, ISBN, status} = this.state.modalFields;
     return [
       [{
         type: 'INPUT',
-        label: '路由名称',
-        field: 'routerName',
-        initialValue: routerName,
-        rules: [{required: true, message: '路由名称不能为空'}],
-        placeholder: '请输入路由名称'
+        label: '教材名称',
+        field: 'bookName',
+        initialValue: bookName,
+        rules: [{required: true, message: '教材名称不能为空'}],
+        placeholder: '请输入教材名称'
       }],
       [{
         type: 'INPUT',
-        label: '路由地址',
-        field: 'routerUrl',
-        initialValue: routerUrl,
-        rules: [{required: true, message: '路由地址不能为空'}],
-        placeholder: '请输入路由地址'
+        label: 'ISBN',
+        field: 'ISBN',
+        initialValue: ISBN,
+        rules: [{required: true, message: 'ISBN不能为空'}],
+        placeholder: '请输入ISBN'
+      }],
+      [{
+        type: 'SELECT',
+        label: '教材状态',
+        field: 'status',
+        initialValue: status ? status.toString() : '',
+        rules: [{required: true, message: '是否启用不能为空'}],
+        opts: [
+          {value: '1', label: '审核中'},
+          {value: '2', label: '审核通过'},
+          {value: '3', label: '审核失败'},
+        ]
       }],
       [{
         type: 'SELECT',
         label: '是否启用',
         field: 'toggle',
-        initialValue: toggle?'1':'0',
+        initialValue: toggle ? '1' : '0',
         rules: [{required: true, message: '是否启用不能为空'}],
         opts: [{value: '1', label: '是'}, {value: '0', label: '否'}]
       }],
@@ -202,6 +236,7 @@ class RouterManage extends Component {
 
   }
 
+
   render() {
     return (
       <div>
@@ -210,7 +245,7 @@ class RouterManage extends Component {
         {this.renderTable()}
         {this.renderModal()}
       </div>
-    );
+    )
   }
 }
 
@@ -219,4 +254,4 @@ const mapDispatchToProps = (dispatch) => ({
   switchVisible: (patch) => dispatch(PopupModalAction.switchVisible(patch))
 });
 
-export default connect(null, mapDispatchToProps)(RouterManage);
+export default connect(null, mapDispatchToProps)(BookManage);
