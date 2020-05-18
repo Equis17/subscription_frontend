@@ -58,7 +58,7 @@ class CourseManage extends Component {
           i.label = i.realName;
           return i;
         });
-        this.setState({teacherList: res ? res.data : []});
+        this.setState({teacherList:res.data});
         return request('get', {url: api.getCollegeList, data: {toggle: '1'}})
       })
       .then(res => {
@@ -67,7 +67,7 @@ class CourseManage extends Component {
           i.label = i.collegeName;
           return i;
         });
-        this.setState({collegeList: res ? res.data : []})
+        this.setState({collegeList:res.data})
       })
       .catch(err => console.log(err));
   }
@@ -77,7 +77,7 @@ class CourseManage extends Component {
     this.setState({isTableLoading: true});
     request('get', {url: api.getCourseList, data: fields})
       .then(res => {
-        const data = res.data ? res.data : [];
+        const data = res.data;
         this.setState({
           isTableLoading: false,
           tableList: data.map(item => ({
@@ -95,11 +95,11 @@ class CourseManage extends Component {
     this.setState({isDetailLoading: true});
     request('get', {url: api.getBookList, data: {status: '2', toggle: '1'}})
       .then(res => {
-        this.setState({bookList: res ? res.data : []});
+        this.setState({bookList:res.data});
         return request('get', {url: api.getCourseBookList + id})
       })
       .then(res => {
-        this.setState({detailList: res ? res.data : [], isDetailLoading: false, detailId: id})
+        this.setState({detailList:res.data, isDetailLoading: false, detailId: id})
       })
   }
 
@@ -179,7 +179,7 @@ class CourseManage extends Component {
       {
         title: '操作',
         dataIndex: 'unit',
-        width: 200,
+        width: 100,
         align: 'center',
         render: (text, record) => this.renderTableOperation(record)
       }

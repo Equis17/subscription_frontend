@@ -7,14 +7,12 @@ import {Menu} from "antd";
 import request from "../../utils/request";
 import api from "../../config/api";
 
-
 const {SubMenu, Item: MenuItem} = Menu;
 
 class NavLeft extends Component {
 
   componentDidMount() {
-    //TODO 解决前端根据权限获取菜单
-    request('get', {url: api.getUserCategory})
+    request('get', {url: api.getClientCategoryList})
       .then(res => {
         res.data.map(i => {
           i.title = i.routerName;
@@ -31,6 +29,7 @@ class NavLeft extends Component {
     this.getMenuKey(navListData, menuKey);
   }
 
+
   getMenuKey(data, key) {
     const {switchMenuName} = this.props;
     data && data.map((item) => {
@@ -40,7 +39,7 @@ class NavLeft extends Component {
     })
   }
 
-  renderMenu = (data) => data ? data.map((item) => {
+  renderMenu = (data) => data.map((item) => {
     if (item.children) {
       return (
         <SubMenu title={item.title} key={item.key}>
@@ -51,7 +50,7 @@ class NavLeft extends Component {
     return <MenuItem title={item.title} key={item.key}>
       <NavLink to={item.key}>{item.title}</NavLink>
     </MenuItem>
-  }) : [];
+  });
 
   render() {
     const {menuKey, navListData} = this.props;
@@ -78,8 +77,8 @@ const mapStateToProps = (state) => ({
   navListData: state.getIn(['navLeft', 'data']),
   menuName: state.getIn(['navLeft', 'menuName']),
   menuKey: state.getIn(['navLeft', 'menuKey'])
-
 });
+
 const mapDispatchToProps = (dispatch) => ({
   getNavList(patch) {
     dispatch(actionCreators.getList(patch))
@@ -88,4 +87,5 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(actionCreators.switchMenuName(title))
   }
 });
+
 export default connect(mapStateToProps, mapDispatchToProps)(NavLeft);

@@ -55,7 +55,7 @@ class BooKListManage extends Component {
           i.label = i.bookName;
           return i;
         });
-        this.setState({bookList: res ? res.data : []});
+        this.setState({bookList: res.data});
         return request('get', {url: api.getClassList, data: {toggle: '1'}})
       })
       .then(res => {
@@ -64,7 +64,7 @@ class BooKListManage extends Component {
           i.label = `${i.className}(${i.session})`;
           return i;
         });
-        this.setState({classList: res ? res.data : []});
+        this.setState({classList: res.data});
         return request('get', {url: api.getCollegeList, data: {toggle: '1'}})
       })
       .then(res => {
@@ -73,7 +73,7 @@ class BooKListManage extends Component {
           i.label = i.collegeName;
           return i;
         });
-        this.setState({collegeList: res ? res.data : []});
+        this.setState({collegeList: res.data});
         return request('get', {url: api.getSubscriptionList})
       })
       .then(res => {
@@ -82,7 +82,7 @@ class BooKListManage extends Component {
           i.label = i.subscriptionName;
           return i;
         });
-        this.setState({subscriptionList: res ? res.data : []});
+        this.setState({subscriptionList: res.data});
       })
       .catch(err => console.log(err));
   }
@@ -93,7 +93,7 @@ class BooKListManage extends Component {
     this.setState({isTableLoading: true});
     request('get', {url: api.getBookLists, data: fields})
       .then(res => {
-        const data = res.data ? res.data : [];
+        const data = res.data;
         this.setState({
           isTableLoading: false,
           tableList: data.map(item => {
@@ -106,6 +106,7 @@ class BooKListManage extends Component {
             const bookNameList = item.bookIds.split(',')
               .map(num => {
                 const info = bookList.filter(book => book.id.toString() === num);
+
                 return info.length > 0 ? info[0]['bookName'] : ''
               })
               .join(',\n');
@@ -113,6 +114,7 @@ class BooKListManage extends Component {
           })
         })
       })
+      .catch(err => console.log(err))
   }
 
   //SearchBox
@@ -162,7 +164,10 @@ class BooKListManage extends Component {
   handleDelete(id) {
     const {searchFilter} = this.state;
     request('post', {url: api.deleteBookLists + id})
-      .then(() => this.getBookLists(searchFilter))
+      .then(res => {
+        message.success(res.message);
+        this.getBookLists(searchFilter)
+      })
       .catch(err => console.log(err));
   }
 
@@ -175,13 +180,25 @@ class BooKListManage extends Component {
       {
         title: '征订状态',
         dataIndex: 'status',
-        render: (text) => ({'0': '未开始', '1': '开始征订', '2': '结束征订', '3': '开始预订', '4': '结束预订', '5': '结束'}[text])
+        render: (text) => ({
+          '0': () => <span style={{color: '#777'}}>未开始</span>,
+          '1': () => <span style={{color: '#00d232'}}>开始征订</span>,
+          '2': () => <span style={{color: '#FF4D4F'}}>结束征订</span>,
+          '3': () => <span style={{color: '#00d232'}}>开始预订</span>,
+          '4': () => <span style={{color: '#FF4D4F'}}>结束预订</span>,
+          '5': () => <span style={{color: '#777'}}>结束</span>
+        }[text]())
       },
-      {title: '是否启用', dataIndex: 'toggle', render: (text, record) => record.toggle ? '已启用' : '未启用'},
+      {
+        title: '是否启用', dataIndex: 'toggle',
+        render: (text, record) => record.toggle
+          ? <span style={{color: '#00d232'}}>已启用</span>
+          : <span style={{color: '#FF4D4F'}}>未启用</span>
+      },
       {
         title: '操作',
         dataIndex: 'unit',
-        width: 200,
+        width: 100,
         align: 'center',
         render: (text, record) => this.renderTableOperation(record)
       }
@@ -217,7 +234,6 @@ class BooKListManage extends Component {
     const {id} = modalFields;
     form.validateFields(['bookIds', 'classIds', 'toggle', 'subscriptionId', 'bookListName', 'collegeId'], err => {
       if (!err) {
-        console.log(form.getFieldsValue());
         const {bookIds, classIds, toggle, subscriptionId, bookListName, collegeId} = form.getFieldsValue();
         request('post', {
           url: id ? api.updateBookLists + id : api.addBookLists,
@@ -255,7 +271,7 @@ class BooKListManage extends Component {
           {required: true, message: '书单名称不能为空'},
           ruleObj.maxChar,
           ruleObj.whitespace,
-          ],
+        ],
         placeholder: '请输入书单名称'
       }],
       [{
@@ -319,7 +335,6 @@ class BooKListManage extends Component {
       }],
     ];
   }
-
 
   render() {
     return (

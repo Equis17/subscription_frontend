@@ -33,7 +33,7 @@ class ClassDetail extends Component {
   getList(id) {
     this.setState({isTableLoading: true});
     request('get', {url: api.getClassListByClassId + id})
-      .then(res => this.setState({tableList: res ? res.data : [], isTableLoading: false}))
+      .then(res => this.setState({tableList:res.data, isTableLoading: false}))
       .catch(err => console.log(err));
   }
 
@@ -81,11 +81,11 @@ class ClassDetail extends Component {
     this.setState({isDetailLoading: true});
     request('get', {url: api.getBookList, data: {status: '2'}})
       .then(res => {
-        this.setState({bookList: res ? res.data : []});
+        this.setState({bookList:res.data});
         return request('get', {url: api.getUserBookListById + id})
       })
       .then(res => {
-        this.setState({detailList: res ? res.data : [], isDetailLoading: false, detailId: id})
+        this.setState({detailList:res.data, isDetailLoading: false, detailId: id})
       })
   }
 

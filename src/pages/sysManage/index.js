@@ -49,7 +49,7 @@ class SysManage extends Component {
           i.label = i.roleName;
           return i;
         });
-        this.setState({roleList: res ? res.data : []})
+        this.setState({roleList: res.data})
       })
       .catch(err => console.log(err));
   }
@@ -57,7 +57,7 @@ class SysManage extends Component {
   getSysManagerList(fields) {
     this.setState({isTableLoading: true});
     request('get', {url: api.getSysManagerList, data: fields})
-      .then(res => this.setState({tableList: res ? res.data : [], isTableLoading: false}))
+      .then(res => this.setState({tableList: res.data, isTableLoading: false}))
       .catch(err => console.log(err));
   }
 
@@ -91,7 +91,7 @@ class SysManage extends Component {
       ],
       [
         {
-          type: 'SELECT', label: '角色类型', field: 'roleId', initialValue: '1',
+          type: 'SELECT', label: '角色类型', field: 'roleId', initialValue: '',
           opts: [...roleList, {value: '', label: '全部'}]
         },
         {
@@ -122,7 +122,9 @@ class SysManage extends Component {
         dataIndex: 'toggle',
         width: 200,
         align: 'center',
-        render: (text, record) => record.toggle ? '已启用' : '未启用'
+        render: (text, record) => record.toggle
+          ? <span style={{color:'#00d232'}}>已启用</span>
+          : <span style={{color:'#FF4D4F'}}>未启用</span>
       },
       {
         title: '操作',

@@ -37,7 +37,7 @@ class CollegeManage extends Component {
   getCollegeList(fields) {
     this.setState({isTableLoading: true});
     request('get', {url: api.getCollegeList, data: fields})
-      .then(res => this.setState({tableList: res ? res.data : [], isTableLoading: false}))
+      .then(res => this.setState({tableList: res.data, isTableLoading: false}))
       .catch(err => console.log(err));
   }
 
@@ -95,7 +95,9 @@ class CollegeManage extends Component {
         dataIndex: 'toggle',
         width: 200,
         align: 'center',
-        render: (text, record) => record.toggle ? '已启用' : '未启用'
+        render: (text, record) => record.toggle
+          ? <span style={{color:'#00d232'}}>已启用</span>
+          : <span style={{color:'#FF4D4F'}}>未启用</span>
       },
       {
         title: '操作',
@@ -162,9 +164,8 @@ class CollegeManage extends Component {
         rules: [
           {required: true, message: '学院名称不能为空'},
           ruleObj.maxChar,
-          ruleObj.minChar,
           ruleObj.whitespace
-          ],
+        ],
         placeholder: '请输入学院名称'
       }],
       [{
@@ -194,9 +195,8 @@ class CollegeManage extends Component {
             }
           }
         ]
-      }],
+      }]
     ];
-
   }
 
   render() {
@@ -206,7 +206,6 @@ class CollegeManage extends Component {
         <br/>
         {this.renderTable()}
         {this.renderModal()}
-
       </div>
     );
   }
@@ -216,4 +215,5 @@ const mapDispatchToProps = (dispatch) => ({
   switchMenuKey: (patch) => dispatch(NavLeftAction.switchMenuKey(patch)),
   switchVisible: (patch) => dispatch(PopupModalAction.switchVisible(patch))
 });
+
 export default connect(null, mapDispatchToProps)(CollegeManage);

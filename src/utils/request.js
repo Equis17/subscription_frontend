@@ -30,13 +30,18 @@ export default (method, options) => {
       const {code, message} = res.data;
       return code === 9999
         ? Promise.reject({success: false, message: message || '系统内部错误,请联系管理员', code})
-        : Promise.resolve({success: true, message: message || '查询成功', ...res.data});
+        : Promise.resolve({
+          success: true,
+          message: message || '查询成功',
+          data: res.data.data || [],
+          ...res.data
+        });
     })
     .catch((err) => {
       if (err.response && err.response.status === 401) {
         window.location.replace('/Login');
       } else {
-        message.error('系统内部错误,请联系管理员');
+        message.error(err.message);
         console.error('request.js: ' + err.message)
       }
     })

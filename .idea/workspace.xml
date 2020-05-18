@@ -1,12 +1,386 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="fa7294c8-0f4f-4b60-852d-df5a19b5119a" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/subscription_sys.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/subscription_sys.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/jest/cssTransform.js" beforeDir="false" afterPath="$PROJECT_DIR$/config/jest/cssTransform.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/jest/fileTransform.js" beforeDir="false" afterPath="$PROJECT_DIR$/config/jest/fileTransform.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/webpack.config.prod.js" beforeDir="false" afterPath="$PROJECT_DIR$/config/webpack.config.prod.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/note/功能表.md" beforeDir="false" afterPath="$PROJECT_DIR$/note/功能表.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/note/接口文档.md" beforeDir="false" afterPath="$PROJECT_DIR$/note/接口文档.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/note/数据库表.md" beforeDir="false" afterPath="$PROJECT_DIR$/note/数据库表.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/note/路由表.md" beforeDir="false" afterPath="$PROJECT_DIR$/note/路由表.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/admin.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/admin.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/axios/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/axios/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/CardTable/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CardTable/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Header/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Header/index.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header/index.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Header/store/contants.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header/store/contants.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Header/store/reducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header/store/reducer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/NavLeft/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NavLeft/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/NavLeft/index.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NavLeft/index.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/NavLeft/store/actionCreators.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NavLeft/store/actionCreators.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/NavLeft/store/constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NavLeft/store/constants.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/NavLeft/store/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NavLeft/store/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/NavLeft/store/reducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NavLeft/store/reducer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/PopupModal/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PopupModal/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/PopupModal/store/actionCreators.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PopupModal/store/actionCreators.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/PopupModal/store/constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PopupModal/store/constants.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/PopupModal/store/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PopupModal/store/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/PopupModal/store/reducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PopupModal/store/reducer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/SearchBox/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SearchBox/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/config/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/config/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Book/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Book/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/BookList/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/BookList/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Category/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Category/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Class/classDetail.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Class/classDetail.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Class/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Class/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/College/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/College/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Course/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Course/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Home/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Home/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Home/index.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Home/index.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Login/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Login/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Login/index.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Login/index.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Quote/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Quote/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Role/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Role/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Router/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Seller/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Seller/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/User/bookManage/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/User/bookManage/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/User/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/User/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/UserBook/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/UserBook/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/sysManage/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/sysManage/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/router.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/router.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/reducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/reducer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/style/common.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/style/common.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/style/default.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/style/default.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/request.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/request.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/utils.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JsBowerSettings">
+    <node-interpreter value="project" />
+    <bower-package value="" />
+    <bower.json value="" />
+  </component>
+  <component name="JsFlowSettings">
+    <service-enabled>true</service-enabled>
+    <exe-path />
+    <other-services-enabled>true</other-services-enabled>
+    <auto-save>true</auto-save>
+  </component>
   <component name="ProjectId" id="1P4nJuBR7A1AIe22nn1QOiMn0pQ" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="autoscrollToSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="sortByType" value="true" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="F:/nodejs/node_global/node_modules/vue-cli" />
+    <property name="javascript.nodejs.core.library.configured.version" value="12.16.2" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.stylelint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.stylelint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.stylelint" value="" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path" value="node" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.gutterIcons" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="ts.external.directory.path" value="D:\Program Files\JetBrains\WebStorm 2019.1\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
+    <property name="two.files.diff.last.used.file" value="$PROJECT_DIR$/src/pages/sysManage/index.js" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\WebStrom\subscription_sys\public\assets" />
+      <recent name="F:\WebStrom\subscription_sys\src\config" />
+      <recent name="F:\WebStrom\subscription_sys" />
+    </key>
+  </component>
+  <component name="RunManager" selected="npm.build">
+    <configuration name="Debug Application" type="JavascriptDebugType" uri="http://localhost:3000">
+      <method v="2" />
+    </configuration>
+    <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="build" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="npm start" type="js.build_tools.npm">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.build" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="fa7294c8-0f4f-4b60-852d-df5a19b5119a" name="Default Changelist" comment="" />
+      <created>1565142167322</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1565142167322</updated>
+      <workItem from="1565142169181" duration="24578000" />
+      <workItem from="1565226730566" duration="20590000" />
+      <workItem from="1565313355768" duration="4000" />
+      <workItem from="1565313435248" duration="5427000" />
+      <workItem from="1565331860027" duration="3527000" />
+      <workItem from="1565411030949" duration="653000" />
+      <workItem from="1565426498874" duration="1078000" />
+      <workItem from="1565506035849" duration="959000" />
+      <workItem from="1565602936677" duration="892000" />
+      <workItem from="1565658917504" duration="75000" />
+      <workItem from="1566801234057" duration="1405000" />
+      <workItem from="1566892872765" duration="5292000" />
+      <workItem from="1566979040071" duration="2652000" />
+      <workItem from="1567041350859" duration="837000" />
+      <workItem from="1567391481582" duration="119000" />
+      <workItem from="1567400400825" duration="1711000" />
+      <workItem from="1569463398522" duration="22093000" />
+      <workItem from="1569491682948" duration="776000" />
+      <workItem from="1569547760091" duration="21285000" />
+      <workItem from="1569636123101" duration="17133000" />
+      <workItem from="1569719888355" duration="22417000" />
+      <workItem from="1570498967534" duration="16548000" />
+      <workItem from="1570523673501" duration="5605000" />
+      <workItem from="1570584017463" duration="18577000" />
+      <workItem from="1570669294092" duration="23566000" />
+      <workItem from="1570757234293" duration="21602000" />
+      <workItem from="1570843485812" duration="7377000" />
+      <workItem from="1570852332498" duration="74000" />
+      <workItem from="1571038928317" duration="5991000" />
+      <workItem from="1571104122183" duration="13743000" />
+      <workItem from="1571794002775" duration="357000" />
+      <workItem from="1571794409451" duration="1277000" />
+      <workItem from="1571966564754" duration="5777000" />
+      <workItem from="1572233661338" duration="9907000" />
+      <workItem from="1572252988726" duration="16000" />
+      <workItem from="1572253447843" duration="101000" />
+      <workItem from="1572253569954" duration="1140000" />
+      <workItem from="1572254724732" duration="30000" />
+      <workItem from="1572314815873" duration="18918000" />
+      <workItem from="1573091893397" duration="73000" />
+      <workItem from="1573523191100" duration="1295000" />
+      <workItem from="1573544239043" duration="2193000" />
+      <workItem from="1573608569286" duration="697000" />
+      <workItem from="1573626088737" duration="3583000" />
+      <workItem from="1573630944944" duration="6283000" />
+      <workItem from="1573697442869" duration="436000" />
+      <workItem from="1574041727066" duration="2359000" />
+      <workItem from="1574044453172" duration="5642000" />
+      <workItem from="1574132215063" duration="18000" />
+      <workItem from="1574132901717" duration="1757000" />
+      <workItem from="1574244355123" duration="414000" />
+      <workItem from="1574299669296" duration="14000" />
+      <workItem from="1574302306640" duration="3166000" />
+      <workItem from="1574316191221" duration="4587000" />
+      <workItem from="1574645094319" duration="17515000" />
+      <workItem from="1574671246630" duration="2200000" />
+      <workItem from="1574731359877" duration="14415000" />
+      <workItem from="1574818273806" duration="13549000" />
+      <workItem from="1574921249462" duration="3598000" />
+      <workItem from="1574990036047" duration="2875000" />
+      <workItem from="1574998159815" duration="2330000" />
+      <workItem from="1575008557149" duration="11308000" />
+      <workItem from="1575250247559" duration="7936000" />
+      <workItem from="1575266592526" duration="10619000" />
+      <workItem from="1575336198230" duration="16889000" />
+      <workItem from="1575422038471" duration="794000" />
+      <workItem from="1575424316192" duration="4824000" />
+      <workItem from="1575445756146" duration="6498000" />
+      <workItem from="1575508477822" duration="12431000" />
+      <workItem from="1575595473064" duration="13878000" />
+      <workItem from="1575855146459" duration="15370000" />
+      <workItem from="1575942054782" duration="12423000" />
+      <workItem from="1576027192272" duration="14758000" />
+      <workItem from="1576114114904" duration="7955000" />
+      <workItem from="1576142861004" duration="672000" />
+      <workItem from="1576200286437" duration="6235000" />
+      <workItem from="1576227225353" duration="35000" />
+      <workItem from="1576461758006" duration="10058000" />
+      <workItem from="1576489486625" duration="935000" />
+      <workItem from="1576553117761" duration="12476000" />
+      <workItem from="1576631977836" duration="21591000" />
+      <workItem from="1576719050885" duration="1290000" />
+      <workItem from="1576721430081" duration="4230000" />
+      <workItem from="1576741471487" duration="740000" />
+      <workItem from="1576805890485" duration="2801000" />
+      <workItem from="1576811244861" duration="373000" />
+      <workItem from="1576823380245" duration="881000" />
+      <workItem from="1577150915836" duration="1387000" />
+      <workItem from="1577327355598" duration="490000" />
+      <workItem from="1577340909094" duration="5804000" />
+      <workItem from="1577410154814" duration="1589000" />
+      <workItem from="1577677307771" duration="1635000" />
+      <workItem from="1577693246416" duration="90000" />
+      <workItem from="1578015091172" duration="6311000" />
+      <workItem from="1578033503145" duration="6388000" />
+      <workItem from="1578367376080" duration="935000" />
+      <workItem from="1578380021355" duration="1792000" />
+      <workItem from="1578383066763" duration="10000" />
+      <workItem from="1581062980907" duration="607000" />
+      <workItem from="1581132553341" duration="584000" />
+      <workItem from="1581576271243" duration="81000" />
+      <workItem from="1581668003341" duration="4000" />
+      <workItem from="1581668029447" duration="3000" />
+      <workItem from="1581859609997" duration="80000" />
+      <workItem from="1581859704697" duration="750000" />
+      <workItem from="1581861267924" duration="20000" />
+      <workItem from="1582016071328" duration="10496000" />
+      <workItem from="1582092902037" duration="4472000" />
+      <workItem from="1582170049835" duration="3617000" />
+      <workItem from="1582379612927" duration="2097000" />
+      <workItem from="1582431290603" duration="13967000" />
+      <workItem from="1582526339442" duration="26000" />
+      <workItem from="1583119565716" duration="10850000" />
+      <workItem from="1583203915306" duration="11000" />
+      <workItem from="1583911348765" duration="619000" />
+      <workItem from="1583979344602" duration="40000" />
+      <workItem from="1584165564572" duration="530000" />
+      <workItem from="1584173574283" duration="90000" />
+      <workItem from="1584178335438" duration="7000" />
+      <workItem from="1584617208953" duration="1013000" />
+      <workItem from="1584671273681" duration="28000" />
+      <workItem from="1584702270028" duration="967000" />
+      <workItem from="1584761063372" duration="25000" />
+      <workItem from="1584762456993" duration="1621000" />
+      <workItem from="1585034885298" duration="106000" />
+      <workItem from="1585035312171" duration="7000" />
+      <workItem from="1586760631287" duration="190000" />
+      <workItem from="1588345825141" duration="651000" />
+      <workItem from="1588412531637" duration="759000" />
+      <workItem from="1588414018899" duration="619000" />
+      <workItem from="1588657353356" duration="2270000" />
+      <workItem from="1588754307101" duration="9000" />
+    </task>
+    <task id="LOCAL-00001" summary="项目初始化">
+      <created>1572243585030</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1572243585030</updated>
+    </task>
+    <task id="LOCAL-00002" summary="项目初始化">
+      <created>1574846407672</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1574846407672</updated>
+    </task>
+    <task id="LOCAL-00003" summary="项目优化">
+      <created>1576575627769</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1576575627769</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="项目初始化" />
+    <MESSAGE value="项目优化" />
+    <option name="LAST_COMMIT_MESSAGE" value="项目优化" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="281" y="78" width="1268" height="716" key="SettingsEditor" timestamp="1584769280509">
+      <screen x="0" y="0" width="1549" height="871" />
+    </state>
+    <state x="281" y="78" width="1268" height="716" key="SettingsEditor/0.0.1549.871@0.0.1549.871" timestamp="1584769280509" />
+    <state x="862" y="263" width="818" height="650" key="find.popup" timestamp="1588754307987">
+      <screen x="0" y="23" width="1680" height="958" />
+    </state>
+    <state x="796" y="218" width="753" height="590" key="find.popup/0.0.1549.871@0.0.1549.871" timestamp="1584762468874" />
+    <state x="862" y="262" width="818" height="648" key="find.popup/0.23.1680.956@0.23.1680.956" timestamp="1588664502053" />
+    <state x="862" y="263" width="818" height="650" key="find.popup/0.23.1680.958@0.23.1680.958" timestamp="1588754307987" />
+    <state x="986" y="298" width="934" height="744" key="find.popup/0.23.1920.1098@0.23.1920.1098" timestamp="1588414035739" />
+    <state width="384" height="47" key="javadoc.popup.new" timestamp="1583133743807">
+      <screen x="0" y="0" width="1549" height="871" />
+    </state>
+    <state width="384" height="47" key="javadoc.popup.new/0.0.1549.871@0.0.1549.871" timestamp="1583133743807" />
+    <state x="432" y="199" key="run.anything.popup" timestamp="1586760760614">
+      <screen x="0" y="0" width="1549" height="871" />
+    </state>
+    <state x="432" y="199" key="run.anything.popup/1920.0.1549.871/0.0.1549.871@0.0.1549.871" timestamp="1586760760614" />
+    <state x="437" y="183" width="672" height="678" key="search.everywhere.popup" timestamp="1584769253206">
+      <screen x="0" y="0" width="1549" height="871" />
+    </state>
+    <state x="437" y="183" width="672" height="678" key="search.everywhere.popup/0.0.1549.871@0.0.1549.871" timestamp="1584769253206" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

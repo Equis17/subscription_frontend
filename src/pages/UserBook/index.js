@@ -45,15 +45,15 @@ class UserBookManage extends Component {
           i.label = `${i.courseName}-${i.courseUserName}(${i.courseTime})`;
           return i;
         });
-        this.setState({courseList: res ? res.data : []});
+        this.setState({courseList:res.data});
       })
-      .catch(error => console.log(error))
+      .catch(err => console.log(err))
   }
 
   getUserBookList(fields) {
     this.setState({isTableLoading: true});
     request('get', {url: api.getUserBookList, data: fields ? fields : {}})
-      .then(res => this.setState({tableList: res ? res.data : [], isTableLoading: false}))
+      .then(res => this.setState({tableList:res.data, isTableLoading: false}))
       .catch(err => console.log(err))
   }
 

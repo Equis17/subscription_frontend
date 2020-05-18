@@ -1,14 +1,17 @@
 export default {
   //public
-  getPublicKey: '/api/public/getPublicKey',
-  getCaptcha: '/api/public/getCaptcha',
-  getRoleType: '/api/public/getRoleType',
-  login: '/api/public/Login',
+  getPublicKey: '/api/public/getPublicKey',                          //获取公钥
+  getCaptcha: '/api/public/getCaptcha',                              //获取验证码
+  getPublicRoleList: '/api/public/getRoleList',                      //获取公共角色列表
+  login: '/api/public/Login',                                        //登录
+  getExcel: '/api/public/getExcel/',                                 //获取书单excel文件
+  getExcelDetail: '/api/public/getExcelDetail/',                                 //获取书单excel文件
 
   //client
-  getUserCategory: '/api/client/category/getList',
-  getUserInfo: '/api/client/User/getInfo',
-  getUserClassList: '/api/client/Class/getUserClassList',
+  getClientCategoryList: '/api/client/category/getList',             //获取用户菜单列表
+  getClientInfo: '/api/client/user/getInfo',                         //获取用户信息
+  editClientInfo: '/api/client/user/editInfo',
+  getUserClassList: '/api/client/classManage/getUserClassList',
   getUserBookListInfo: '/api/client/bookList/getUserBookList',
   getUserBook: '/api/client/book/getUserBook',
   applyBook: '/api/client/book/applyBook',
@@ -16,6 +19,7 @@ export default {
   getToSubList: '/api/client/bookList/getToSubList',
   addBookQuote: '/api/client/quote/add',
   getQuotedList: '/api/client/quote/getList',
+  updateBookQuote: '/api/client/quote/update/',
   getClientBookList: '/api/client/userBook/getList',
   handleUserBook: '/api/client/userBook/handle',
   getClientUserBook: '/api/client/userBook/getUserBook',
@@ -27,10 +31,9 @@ export default {
   getClientUserOrderList: '/api/client/order/getUserList',
   getAssignerBookList: '/api/client/bookList/getAssignerBookList',
   getSubscriptionListByAssigner: '/api/client/subscription/getList',
-  getAssignerBookListWithClass:'/api/client/bookList/getAssignerBookListWithClass',
-  getAssignerClassList:'/api/client/Class/getAssignerClassList',
-  addClassByUser:'/api/client/Class/addClass',
-  getExcel:'/api/public/getExcel/',
+  getAssignerBookListWithClass: '/api/client/bookList/getAssignerBookListWithClass',
+  getAssignerClassList: '/api/client/classManage/getAssignerClassList',
+  addClassByUser: '/api/client/classManage/addClass',
   //router
   getRouterList: '/api/sys/router/getList',
   addRouter: '/api/sys/router/add',
@@ -56,21 +59,21 @@ export default {
   deleteCollege: '/api/sys/college/delete/',
   updateCollege: '/api/sys/college/update/',
   //User
-  getUserList: '/api/sys/User/getList',
-  getTeacherList: '/api/sys/User/getTeacherList',
-  getAssignUserList: '/api/sys/User/getAssignUserList',
-  getAssignerList: '/api/sys/User/getAssignerList',
-  addUser: '/api/sys/User/add',
-  addAssigner: '/api/sys/User/addAssigner',
-  deleteUser: '/api/sys/User/delete/',
-  updateUser: '/api/sys/User/update/',
-  updateAssigner: '/api/sys/User/updateAssigner/',
+  getUserList: '/api/sys/userManage/getList',
+  getTeacherList: '/api/sys/userManage/getTeacherList',
+  getAssignUserList: '/api/sys/userManage/getAssignUserList',
+  getAssignerList: '/api/sys/userManage/getAssignerList',
+  addUser: '/api/sys/userManage/add',
+  addAssigner: '/api/sys/userManage/addAssigner',
+  deleteUser: '/api/sys/userManage/delete/',
+  updateUser: '/api/sys/userManage/update/',
+  updateAssigner: '/api/sys/userManage/updateAssigner/',
   //Class
-  getClassList: '/api/sys/Class/getList',
-  addClass: '/api/sys/Class/add',
-  deleteClass: '/api/sys/Class/delete/',
-  updateClass: '/api/sys/Class/update/',
-  getClassListByClassId: '/api/sys/Class/getListByClassId/',
+  getClassList: '/api/sys/classManage/getList',
+  addClass: '/api/sys/classManage/add',
+  deleteClass: '/api/sys/classManage/delete/',
+  updateClass: '/api/sys/classManage/update/',
+  getClassListByClassId: '/api/sys/classManage/getListByClassId/',
   //Book
   getBookList: '/api/sys/book/getList',
   getBookQuoteList: '/api/sys/book/getBookQuoteList',

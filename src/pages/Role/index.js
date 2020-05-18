@@ -29,7 +29,6 @@ class RoleManage extends Component {
     this.getRoleList({})
   }
 
-
   _setModalFields({toggle = '1', roleName = '', id = ''}) {
     this.setState({modalFields: {toggle, roleName, id}});
   }
@@ -37,7 +36,7 @@ class RoleManage extends Component {
   getRoleList(fields) {
     this.setState({isTableLoading: true});
     request('get', {url: api.getRoleList, data: fields})
-      .then(res => this.setState({tableList: res ? res.data : [], isTableLoading: false}))
+      .then(res => this.setState({tableList: res.data, isTableLoading: false}))
       .catch(err => console.log(err));
   }
 
@@ -95,7 +94,9 @@ class RoleManage extends Component {
         dataIndex: 'toggle',
         width: 200,
         align: 'center',
-        render: (text, record) => record.toggle ? '已启用' : '未启用'
+        render: (text, record) => record.toggle
+          ? <span style={{color:'#00d232'}}>已启用</span>
+          : <span style={{color:'#FF4D4F'}}>未启用</span>
       },
       {
         title: '操作',
@@ -162,16 +163,15 @@ class RoleManage extends Component {
         rules: [
           {required: true, message: '角色名称不能为空'},
           ruleObj.maxChar,
-          ruleObj.minChar,
           ruleObj.whitespace
-          ],
+        ],
         placeholder: '请输入角色名称'
       }],
       [{
         type: 'SELECT',
         label: '是否启用',
         field: 'toggle',
-        initialValue: toggle?'1':'0',
+        initialValue: toggle ? '1' : '0',
         rules: [{required: true, message: '是否启用不能为空'}],
         opts: [{value: '1', label: '是'}, {value: '0', label: '否'}]
       }],
@@ -194,9 +194,8 @@ class RoleManage extends Component {
             }
           }
         ]
-      }],
+      }]
     ];
-
   }
 
   render() {
@@ -206,7 +205,6 @@ class RoleManage extends Component {
         <br/>
         {this.renderTable()}
         {this.renderModal()}
-
       </div>
     );
   }
@@ -216,4 +214,5 @@ const mapDispatchToProps = (dispatch) => ({
   switchMenuKey: (patch) => dispatch(NavLeftAction.switchMenuKey(patch)),
   switchVisible: (patch) => dispatch(PopupModalAction.switchVisible(patch))
 });
+
 export default connect(null, mapDispatchToProps)(RoleManage);

@@ -20,13 +20,13 @@ class Login extends Component {
   }
 
   componentDidMount() {
-    this.getRoleType()
+    this.getRoleType();
     this.getCaptcha();
   }
 
   getRoleType() {
-    request('get', {url: api.getRoleType, data: {toggle: 1}})
-      .then(res => this.setState({roleList: res.data ? res.data : []}))
+    request('get', {url: api.getPublicRoleList, data: {toggle: 1}})
+      .then(res => this.setState({roleList: res.data}))
       .catch(err => console.log(err))
   }
 
@@ -79,8 +79,8 @@ class Login extends Component {
     const {captchaElement, isLoading, roleList} = this.state;
     const {getFieldDecorator} = this.props.form;
     return (
-      <div className={'Login-modal'}>
-        <p className={'Login-modal-title'}>用户登录</p>
+      <div className={'login-modal'}>
+        <p className={'login-modal-title'}>用户登录</p>
         <Form className="login-form" onKeyPress={(e) => e.charCode === 13 && this.handleSubmit()}>
           <Form.Item>
             {getFieldDecorator('account', {
@@ -154,14 +154,13 @@ class Login extends Component {
   render() {
     return (
       <div className={'login'}>
-        <div className={'Login-header'}>
+        <div className={'login-header'}>
           <img src="/assets/logo-ant.svg" alt=""/>
           <span>高校教材征订系统</span>
         </div>
-        <div className={'Login-wrap'}>
+        <div className={'login-wrap'}>
           {this.renderModal()}
         </div>
-
       </div>
     );
   }

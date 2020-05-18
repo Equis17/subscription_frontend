@@ -18,6 +18,7 @@ class quoteManage extends Component {
       tableList: [],
       sellerList: [],
       bookList: [],
+      subscriptionList: [],
       modalFields: {
         id: '',
         bookId: '',
@@ -38,39 +39,45 @@ class quoteManage extends Component {
       })
   }
 
-  _setModalFields({id = '', bookId = '', sellerId = '', price = '', status = ''}) {
-    this.setState({modalFields: {id, bookId, sellerId, price, status}})
+  _setModalFields({id = '', bookId = '', sellerId = '', price = '', status = '', subscriptionId = ''}) {
+    this.setState({modalFields: {id, bookId, sellerId, price, status, subscriptionId}})
   }
 
   getSelectList() {
     return request('get', {url: api.getSellerSelectList})
       .then(res => {
-        const sellerList = res
-          ? res.data.map((seller) => ({
-            ...seller,
-            label: `${seller.source}-${seller.sellerName}-${seller.phoneNumber}`,
-            value: seller.id
-          }))
-          : [];
+        const sellerList = res.data.map((seller) => ({
+          ...seller,
+          label: `${seller.source}-${seller.sellerName}-${seller.phoneNumber}`,
+          value: seller.id
+        }));
         this.setState({sellerList});
         return request('get', {url: api.getBookList, data: {toggle: '1', status: '2'}})
       })
       .then(res => {
-        const bookList = res
-          ? res.data.map((book) => ({
-            ...book,
-            label: `${book.bookName}-(${book.ISBN})`,
-            value: book.id
-          }))
-          : [];
-        this.setState({bookList})
-      });
+        const bookList = res.data.map((book) => ({
+          ...book,
+          label: `${book.bookName}-(${book.ISBN})`,
+          value: book.id
+        }));
+        this.setState({bookList});
+        return request('get', {url: api.getSubscriptionList})
+      })
+      .then(res => {
+        const subscriptionList = res.data.map(item => ({
+          ...item,
+          label: item.subscriptionName,
+          value: item.id.toString()
+        }));
+        this.setState({subscriptionList})
+      })
+      .catch(err => console.log(err))
   }
 
   getQuoteList(fields) {
     this.setState({isTableLoading: true});
     request('get', {url: api.getQuoteList, data: fields})
-      .then(res => this.setState({tableList: res ? res.data : [], isTableLoading: false}))
+      .then(res => this.setState({tableList: res.data, isTableLoading: false}))
       .catch(err => console.log(err));
   }
 
@@ -83,7 +90,7 @@ class quoteManage extends Component {
   renderSearchBox = () => <SearchBox title={'新增报价'} createMethod={(form) => this._createSearchForm(form)}/>;
 
   _createSearchForm(form) {
-    const {sellerList, bookList} = this.state;
+    const {sellerList, bookList,subscriptionList} = this.state;
     return [
       [
         {
@@ -114,7 +121,14 @@ class quoteManage extends Component {
           }],
         }
       ],
-      [{type: 'INPUT', label: '价格', field: 'price'}]
+      [
+        {type: 'INPUT', label: '价格', field: 'price'},
+        {
+          type: 'SELECT', label: '征订年份', field: 'subscriptionId', initialValue: '1',
+          opts: [...subscriptionList, {label: '全部', value: ''}]
+
+        },
+      ]
     ]
   }
 
@@ -129,10 +143,10 @@ class quoteManage extends Component {
       .catch(err => console.log(err));
   }
 
-  handleSub(sellerId,bookId) {
+  handleSub(sellerId, bookId,subscriptionId) {
     const {searchFilter} = this.state;
 
-    request('post', {url: api.subQuote, data: {bookId,sellerId}})
+    request('post', {url: api.subQuote, data: {bookId, sellerId,subscriptionId}})
       .then(err => {
         message.success(err.message);
         this.getQuoteList(searchFilter)
@@ -148,13 +162,18 @@ class quoteManage extends Component {
       {title: '手机号码', dataIndex: 'phoneNumber'},
       {title: '邮箱', dataIndex: 'email'},
       {title: '教材名称 ', dataIndex: 'bookName', render: (text, row) => `${row.bookName}-${row.ISBN}`},
+      {title:'征订年份',dataIndex:'subscriptionName'},
       {title: '报价', dataIndex: 'price'},
       {
         title: '征订状态',
         dataIndex: 'status',
         width: 100,
         align: 'center',
-        render: (text) => ({'1': '征订中', '2': '已被征订', '3': '未被征定'}[text])
+        render: (text) => ({
+          '1': () => <span style={{color: '#777'}}>征订中</span>,
+          '2': () => <span style={{color: '#00d232'}}>已被征订</span>,
+          '3': () => <span style={{color: '#FF4D4F'}}>未被征定</span>
+        }[text]())
       },
       {
         title: '报价时间',
@@ -165,7 +184,7 @@ class quoteManage extends Component {
       {
         title: '操作',
         dataIndex: 'unit',
-        width: 200,
+        width: 150,
         align: 'center',
         render: (text, record) => this.renderTableOperation(record)
       }
@@ -196,7 +215,7 @@ class quoteManage extends Component {
           title={'是否征订该报价?'}
           okText={'确认'}
           cancelText={'取消'}
-          onConfirm={() => this.handleSub(record.sellerId,record.bookId)}
+          onConfirm={() => this.handleSub(record.sellerId, record.bookId,record.subscriptionId)}
         >
           <a>征订</a>
         </Popconfirm>

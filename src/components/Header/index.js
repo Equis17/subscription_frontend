@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import {NavLink} from 'react-router-dom'
 import JWTDecode from 'jwt-decode'
 import {connect} from 'react-redux'
 import {Col, Row} from "antd";
@@ -26,8 +25,8 @@ class Header extends Component {
     }, 1000);
     const token = localStorage.getItem('token');
     const {_userName: userName} = JWTDecode(token);
-    this.setState({userName})
-    // this.getWeatherAPIData();
+    this.setState({userName});
+    this.getWeatherAPIData();
   }
 
   handleExit() {

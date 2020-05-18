@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
 import {connect} from "react-redux";
 import {SearchBox, CardTable, PopupModal} from '../../components';
-import {actionCreators as NavLeftAction} from './../../components/NavLeft/store'
 import {actionCreators as PopupModalAction} from './../../components/PopupModal/store'
+import {actionCreators as NavLeftAction} from "./../../components/NavLeft/store";
 import {message, Popconfirm} from "antd";
 
 import api from '../../config/api'
@@ -38,7 +38,7 @@ class RouterManage extends Component {
   getRouterList(fields) {
     this.setState({isTableLoading: true});
     request('get', {url: api.getRouterList, data: fields})
-      .then(res => this.setState({tableList: res ? res.data : [], isTableLoading: false}))
+      .then(res => this.setState({tableList: res.data, isTableLoading: false}))
       .catch(err => console.log(err));
   }
 
@@ -96,7 +96,9 @@ class RouterManage extends Component {
         dataIndex: 'toggle',
         width: 200,
         align: 'center',
-        render: (text, record) => record.toggle? '已启用' : '未启用'
+        render: (text, record) => record.toggle
+          ? <span style={{color:'#00d232'}}>已启用</span>
+          : <span style={{color:'#FF4D4F'}}>未启用</span>
       },
       {
         title: '操作',
@@ -145,11 +147,10 @@ class RouterManage extends Component {
         })
         .catch(err => console.log(err))
     })
-
   }
 
   renderModal() {
-    return <PopupModal resetValue={()=>this._setModalFields({})} createMethod={form => this._createModalForm(form)}/>
+    return <PopupModal resetValue={() => this._setModalFields({})} createMethod={form => this._createModalForm(form)}/>
   }
 
   _createModalForm(form) {
@@ -177,14 +178,14 @@ class RouterManage extends Component {
           ruleObj.maxChar,
           ruleObj.whitespace,
           ruleObj.url
-          ],
+        ],
         placeholder: '请输入路由地址'
       }],
       [{
         type: 'SELECT',
         label: '是否启用',
         field: 'toggle',
-        initialValue: toggle?'1':'0',
+        initialValue: toggle ? '1' : '0',
         rules: [{required: true, message: '是否启用不能为空'}],
         opts: [{value: '1', label: '是'}, {value: '0', label: '否'}]
       }],
@@ -209,7 +210,6 @@ class RouterManage extends Component {
         ]
       }],
     ];
-
   }
 
   render() {

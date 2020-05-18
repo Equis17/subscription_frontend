@@ -15,7 +15,7 @@ class CategoryManage extends Component {
       routerList: [],
       isTableLoading: true,
       modalFields: {
-        toggle:1,
+        toggle: 1,
         selectedList: [],
         roleName: '',
         id: '',
@@ -39,7 +39,7 @@ class CategoryManage extends Component {
     request('get', {url: api.getRouterList})
       .then(res => {
         res.data.map(item => item.label = `${item.routerName}(${item.routerUrl})`);
-        this.setState({routerList: res ? res.data : []});
+        this.setState({routerList: res.data});
       })
       .catch(err => console.log(err));
   }
@@ -47,7 +47,7 @@ class CategoryManage extends Component {
   getCategoryList() {
     this.setState({isTableLoading: true});
     request('get', {url: api.getCategoryList})
-      .then(res => this.setState({tableList: res ? res.data : [], isTableLoading: false}));
+      .then(res => this.setState({tableList: res.data, isTableLoading: false}));
   }
 
   //Table
@@ -60,7 +60,9 @@ class CategoryManage extends Component {
         dataIndex: 'toggle',
         width: 200,
         align: 'center',
-        render: (text, record) => record.toggle  ? '已启用' : '未启用'
+        render: (text, record) => record.toggle
+          ? <span style={{color:'#00d232'}}>已启用</span>
+          : <span style={{color:'#FF4D4F'}}>未启用</span>
       },
       {
         title: '操作',
@@ -99,7 +101,7 @@ class CategoryManage extends Component {
     const {id, roleId} = modalFields;
     let routerList = form.getFieldsValue()
       .routerList
-      .filter(i => routers.some(r => r.id == i));
+      .filter(i => routers.some(r => r.id === i));
     request('post', {
       url: id ? api.updateCategory + id : api.addCategory,
       data: {routerList, roleId}
@@ -171,4 +173,5 @@ const mapDispatchToProps = (dispatch) => ({
   switchMenuKey: (patch) => dispatch(NavLeftAction.switchMenuKey(patch)),
   switchVisible: (patch) => dispatch(PopupModalAction.switchVisible(patch))
 });
+
 export default connect(null, mapDispatchToProps)(CategoryManage)

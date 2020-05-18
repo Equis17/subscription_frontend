@@ -18,7 +18,7 @@ class BookManage extends Component {
         bookName: '',
         ISBN: '',
         toggle: '1',
-        status:'',
+        status: '',
         id: ''
       },
       searchFilter: {}
@@ -38,7 +38,7 @@ class BookManage extends Component {
   getBookList(fields) {
     this.setState({isTableLoading: true});
     request('get', {url: api.getBookList, data: fields})
-      .then(res => this.setState({tableList: res ? res.data : [], isTableLoading: false}))
+      .then(res => this.setState({tableList: res.data, isTableLoading: false}))
       .catch(err => console.log(err));
   }
 
@@ -108,16 +108,21 @@ class BookManage extends Component {
         width: 200,
         align: 'center',
         render: (text, record) => {
-          return {1: '审核中', 2: '审核通过', 3: '审核失败'}[record.status]
+          return {
+            1: () => <span style={{color: '#777'}}>审核中</span>,
+            2: () => <span style={{color: '#00d232'}}>审核通过</span>,
+            3: () => <span style={{color: '#FF4D4F'}}>审核未通过</span>
+          }[record.status]()
         }
-
       },
       {
         title: '是否启用',
         dataIndex: 'toggle',
         width: 200,
         align: 'center',
-        render: (text, record) => record.toggle ? '已启用' : '未启用'
+        render: (text, record) => record.toggle
+          ? <span style={{color: '#00d232'}}>已启用</span>
+          : <span style={{color: '#FF4D4F'}}>未启用</span>
       },
       {
         title: '操作',
